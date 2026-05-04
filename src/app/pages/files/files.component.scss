@@ -1,0 +1,264 @@
+
+/* Main Container - High whitespace, clean white background */
+.files-wrapper {
+    padding: 24px;
+    height: calc(100vh - 65px);
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: #f9f9f9;
+}
+
+.title-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Section - Matches your "Users" title and description */
+.header-section {
+    display: flex;
+    justify-content: right;
+    align-items: flex-start;
+    margin-bottom: 32px;
+
+    h1 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #111827;
+        margin: 0;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        color: #6b7280;
+        margin-top: 4px;
+    }
+}
+
+/* Actions - Black "Pill" button with the "+" icon style */
+.header-actions {
+    display: flex;
+    gap: 12px;
+
+    .btn-new {
+        background-color: #1a1a1a;
+        /* Darkest gray/black */
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 99px;
+        /* Complete pill shape */
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: opacity 0.2s;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    .btn-refresh {
+        background-color: transparent;
+        border: 1px solid #e5e7eb;
+        padding: 10px 20px;
+        border-radius: 99px;
+        color: #374151;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #f9fafb;
+        }
+    }
+}
+
+/* Content Layout and Sidebar Bordering */
+.content-layout {
+    display: flex;
+    border-top: 1px solid #f3f4f6;
+    height: calc(100vh - 200px);
+}
+
+.table-wrapper {
+    flex: 1;
+    overflow-y: auto;
+
+    &.with-panel {
+        border-right: 1px solid #f3f4f6;
+    }
+}
+
+/* Table Design - Replicating the "Users" table rows and headers */
+::ng-deep .custom-table {
+    .p-datatable-thead>tr>th {
+        background-color: #ffffff;
+        color: #9ca3af;
+        /* Light gray headers */
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        padding: 16px;
+        border-bottom: 1px solid #f3f4f6;
+        text-transform: uppercase;
+    }
+
+    .p-datatable-tbody>tr {
+        border-bottom: 1px solid #f3f4f6;
+        background-color: #ffffff;
+
+        &:hover {
+            background-color: #fcfcfc;
+        }
+
+        /* Selected state for when the right panel is open */
+        &.selected-row {
+            background-color: #f9fafb;
+        }
+
+        td {
+            padding: 18px 16px;
+            font-size: 14px;
+            color: #374151;
+            vertical-align: middle;
+        }
+    }
+}
+
+/* Badges - Matching the soft "Member/Role" pill style */
+.size-badge {
+    background-color: #f3f4f6;
+    /* Soft gray */
+    color: #4b5563;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* Actions Column Icons - Light gray until hover */
+.action-icons {
+    display: flex;
+    gap: 16px;
+    color: #d1d5db;
+
+    i {
+        cursor: pointer;
+        font-size: 16px;
+        transition: color 0.2s;
+
+        &:hover {
+            color: #111827;
+        }
+    }
+}
+
+/* Right Detail Panel - Clean and integrated */
+.info-panel {
+    width: 400px;
+    background-color: #f9f9f9;
+    padding: 32px 24px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    margin-left: 5px;
+
+    .panel-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .close-panel {
+            color: #9ca3af;
+            cursor: pointer;
+            font-size: 18px;
+
+            &:hover {
+                color: #111827;
+            }
+        }
+    }
+
+    /* Labels like "ACTIONS" and "OBJECT INFO" */
+    label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        color: #9ca3af;
+        letter-spacing: 0.1em;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+    }
+
+    .panel-btn {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-bottom: 12px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #374151;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Delete button within panel */
+        &.danger {
+            color: #dc2626;
+            border-color: #fee2e2;
+
+            &:hover {
+                background-color: #fef2f2;
+            }
+        }
+    }
+}
+
+/* The Card */
+.table-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  width: 100%;
+}
+
+/* Table Customization */
+::ng-deep .p-datatable-clean .p-datatable-thead>tr>th {
+  background: #f9f9f9;
+  color: #666;
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+::ng-deep .p-datatable-clean .p-datatable-tbody>tr>td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+  font-size: 0.95rem;
+}

@@ -1,0 +1,52 @@
+<div class="search-palette">
+  <div class="search-header">
+    <i class="pi pi-search search-icon"></i>
+    <input 
+      type="text" 
+      [(ngModel)]="searchQuery" 
+      (input)="onSearch()"
+      placeholder="Find chats in your history" 
+      autoFocus>
+    <i class="pi pi-times close-btn" (click)="onClose()"></i>
+  </div>
+
+  <div class="search-results">
+    @if (filteredChats.length === 0) {
+      <div class="no-results">
+        No results found
+      </div>      
+    }
+
+    <div *ngFor="let chat of filteredChats" 
+      class="result-item" 
+      (click)="onSelectItem(chat)">
+      
+      <div class="item-main">
+        <!--<i class="pi {{item.icon}}"></i>-->
+        <i class="pi {{ chat.icon }}" style="margin-right: 8px; color: #707070;"></i>
+        <span 
+          class="item-title"
+          [pTooltip]="chat.text" 
+          tooltipPosition="left"
+          showDelay="300">
+            {{ chat.text }}
+        </span>
+      </div>
+      
+      <div class="item-meta">
+        <span class="item-date">{{ chat.date | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+        <i class="pi pi-arrow-left return-icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <!--<p-virtualScroller [items]="items" [itemSize]="50" [lazy]="true" [showLoader]="true" [rows]="10"
+    [totalRecords]="totalRecords" (onLazyLoad)="loadItems($event)" style="height:400px">
+    <ng-template let-item pTemplate="item">
+      <div class="p-2 border-bottom-1" *ngIf="item">
+        {{ item.name }}
+      </div>
+      <div *ngIf="!item">Loading...</div>
+    </ng-template>
+  </p-virtualScroller>-->
+</div>

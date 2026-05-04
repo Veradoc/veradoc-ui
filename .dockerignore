@@ -1,0 +1,57 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build output
+dist/
+tmp/
+out/
+documentation/
+
+# IDE / Editor folders
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Version control
+.git/
+.gitignore
+.hg/
+.svn/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+e2e/
+
+# Docker files (Optional: Prevents the Dockerfile itself from being copied into the image)
+Dockerfile
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# OS generated files
+.DS_Store
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Misc
+.editorconfig
+.npmrc
+README.md
+LICENSE
+
+.angular

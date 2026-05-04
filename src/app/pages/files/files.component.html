@@ -1,0 +1,99 @@
+<div class="files-wrapper">
+    <div class="header-section">
+        <div class="header-actions">
+            <p-button icon="pi pi-refresh" size="small" label="Refresh"
+                [style]="{'background-color': '#ffffff', 'color': '#1a1a1a', 'border': '1px solid #e5e7eb'}"
+                (onClick)="loadFiles()"/>   
+            <!-- The Upload Menu -->                
+            <p-button 
+                label="Upload" 
+                [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}"
+                size="small"
+                icon="pi pi-upload" 
+                iconPos="right"
+                (click)="menu.toggle($event)">
+            </p-button>            
+            <p-menu #menu [model]="uploadTypes" [popup]="true" [style]="{'font-size': '0.875rem', 'width': '200px'}">></p-menu>
+
+            <input 
+                #fileInput 
+                type="file"
+                style="display: none" 
+                (change)="onFileSelected($event)"/>                
+            <input 
+                #folderInput 
+                type="file" 
+                webkitdirectory 
+                directory
+                style="display: none" 
+                (change)="onFolderSelected($event)"/>                
+        </div>
+    </div>
+
+    <div class="content-layout">
+        <div class="table-card">
+            <p-table [value]="files" [(selection)]="selectedFiles" dataKey="name" styleClass="p-datatable-clean" (selectionChange)="onCheckboxClick(null)">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox (click)="onCheckboxClick(null)"></p-tableHeaderCheckbox>
+                        </th>
+                        <th>NAME</th>
+                        <th>LAST MODIFIED</th>
+                        <th>SIZE</th>
+                        <th style="width: 8rem; text-align: center;">ACTIONS</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-file>
+                    <tr (click)="onRowClick(file)" [class.selected-row]="selectedFile?.name === file.name">
+                        <td (click)="$event.stopPropagation(); onCheckboxClick(file)">
+                            <p-tableCheckbox [value]="file" (click)="onCheckboxClick(file)"></p-tableCheckbox>
+                        </td>
+
+                        <td class="file-name-cell">
+                            <i [class]="getFileIcon(file.name)" class="file-icon"></i>
+                            <span>{{ file.name }}</span>
+                        </td>
+                        <td class="text-muted">{{ convertToDate(file.last_modified) | date:'medium' }}</td>
+                        <td>
+                            <span class="size-badge">{{ formatSize(file.size_bytes)}}</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="action-icons">
+                                <i class="pi pi-trash" (click)="onDeleteFile(file); $event.stopPropagation()"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <!-- File Panel-->
+        <aside class="info-panel" *ngIf="selectedFile">
+            <div class="panel-top">
+                <div class="panel-title">
+                    <i [class]="getFileIcon(selectedFile.name)"></i>
+                    <span>{{ selectedFile.name }}</span>
+                </div>
+                <i class="pi pi-times close-panel" (click)="selectedFile = null"></i>
+            </div>
+
+            <div class="panel-content">
+                <label>ACTIONS</label>
+                <button class="panel-btn" (click)="onDownloadFile(selectedFile)"><i class="pi pi-download"></i>Download</button>
+                <button class="panel-btn danger" (click)="onDeleteFile(selectedFile)">
+                    <i class="pi pi-trash"></i> Delete Object
+                </button>
+
+                <div class="info-group" *ngIf="showDetails">
+                    <label>OBJECT INFO</label>
+                    <div class="info-item"><strong>Size:</strong> {{formatSize(selectedFile.size_bytes)}}</div>
+                    <div class="info-item"><strong>Last Modified:</strong> {{selectedFile.last_modified | date:'short'}}</div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <p-confirmDialog [style]="{ width: '450px' }" />    
+</div>

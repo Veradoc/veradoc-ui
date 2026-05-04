@@ -1,0 +1,25 @@
+/* Import PrimeIcons */
+@import "primeicons/primeicons.css";
+@import 'primeflex/primeflex.css';
+
+/* VeraDoc Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
+
+:root {
+  --font-family: "Inter", sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #f9f9f9; 
+  font-family: var(--font-family); /* Use PrimeNG's font variable */
+}

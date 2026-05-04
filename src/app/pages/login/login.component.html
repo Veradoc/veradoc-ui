@@ -1,0 +1,62 @@
+<div class="login-container">
+  <div class="login-card shadow-2">
+    <div class="p-5">
+      <div class="login-header">
+        <!-- <div class="brand-logo mb-3">
+          <img src="images/VeraDoc_Mark.png" alt="VeraDoc Logo" />
+        </div> -->
+        <h1 class="brand-title">VeraDoc</h1>
+        <p class="brand-subtitle">Private RAG Knowledge Base</p>
+      </div>
+
+      <button class="google-btn" (click)="onLoginWithGoogle()">
+        <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google logo">
+        <span>Continue with Google</span>
+      </button>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+      
+      <div class="login-form flex flex-column gap-4">
+        <div class="field-group">
+          <span class="p-input-icon-left w-full">
+            <input 
+              pInputText id="email" 
+              [(ngModel)]="email" 
+              placeholder="Enter your email"
+              class="w-full" />
+          </span>
+        </div>
+
+        <div class="field-group">
+          <p-password 
+            [(ngModel)]="password" 
+            [toggleMask]="true" 
+            [feedback]="false" 
+            placeholder="Enter your password"
+            styleClass="w-full" 
+            inputStyleClass="w-full"
+            (keydown)="onKeyDown($event)">
+          </p-password>
+        </div>
+
+        <p-button 
+          styleClass="w-full p-button-lg mt-2"        
+          label="Sign in"           
+          [loading]="loading"
+          (onClick)="onLogin()">
+        </p-button>
+
+        <!--<div class="footer-links">
+          <a href="#" class="text-sm no-underline text-blue-600 font-medium">Forgot password?</a>
+        </div>-->  
+      </div> 
+    </div>
+
+    <div class="waitlist-footer">
+      <span>Want early access?</span>
+      <a href="#" class="waitlist-link">Join waitlist</a>
+    </div>       
+  </div>
+</div>

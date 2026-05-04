@@ -1,0 +1,71 @@
+<div class="dialog-container">
+  <div class="search-header">
+    <i class="pi pi-search search-icon"></i>
+    <input 
+      type="text" 
+      [(ngModel)]="searchQuery" 
+      (input)="onFilterModels()"
+      placeholder="Find local models" 
+      autoFocus>
+
+    <div class="header-actions">
+      <button pButton icon="pi pi-arrows-v" 
+              class="p-button-text p-button-sm" 
+              [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}"
+              (click)="toggleTerminal()"
+              pTooltip="Toggle Logs">
+      </button>
+    </div>
+
+    <i class="pi pi-times close-btn" (click)="onClose()"></i>
+  </div>
+
+  <div class="search-results">
+    @if (filteredModels.length === 0) {
+        <div class="no-results">
+            There is no model running
+        </div>
+    }
+
+    <div class="model-selector-container">
+      <div class="model-list">
+        <div class="model-row" *ngFor="let model of filteredModels">
+          <div class="col-main">
+            <span class="model-name">{{ model.name }}</span>
+            <span class="badge-quant">{{ model.quant }}</span>
+          </div>
+          <div class="col-author">{{ model.family }}</div>
+          <div class="col-params">{{ model.params }}</div>
+          <div class="col-size">{{ model.size }}</div>
+
+          <div class="col-status">
+            <span [ngClass]="model.running ? 'badge-running' : 'badge-stopped'">
+              {{ model.running ? 'RUNNING' : 'STOPPED' }}
+            </span>
+          </div>
+          <div class="col-action">
+            <button pButton type="button" 
+              size="small"
+              [icon]="model.running ? 'pi pi-stop-circle' : 'pi pi-play-circle'" 
+              [class]="model.running ? 'btn-stop' : 'btn-start'"
+              (click)="$event.stopPropagation(); onToggleModel(model)"
+              [pTooltip]="model.running ? 'Unload from memory' : 'Load into memory'">
+            </button>
+            <button pButton type="button" 
+              icon="pi pi-trash" 
+              class="btn-delete p-button-text"
+              (click)="$event.stopPropagation(); onConfirmDelete(model)"
+              pTooltip="Remove from disk">
+              </button>            
+          </div>        
+        </div>        
+      </div>
+    </div>
+
+    <div class="terminal-wrapper" [class.visible]="showTerminal">
+      <app-terminal-log #terminalModel [title]="'Ollama Engine Logs'" />      
+    </div>    
+  </div>
+</div>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

@@ -1,0 +1,87 @@
+<div class="settings-container">
+  <aside class="settings-sidebar">
+    <h2>Settings</h2>
+    <nav>
+      <button *ngFor="let item of menuItems" 
+              [class.active]="selectedSection === item.id"
+              (click)="selectedSection = item.id"
+              pRipple>
+        {{ item.label }}
+      </button>
+    </nav>
+  </aside>
+
+  <main class="settings-content">
+    @if (selectedSection === 'general') {
+      <section>
+        <h3>Profile</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Full name</label>
+            <div class="input-with-avatar">
+              <span class="avatar-circle">{{ authService.currentUser()?.name | slice:0:2 | uppercase }}</span>
+              <input type="text" pInputText 
+                placeholder="Picasso" 
+                [(ngModel)]="name"
+                />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>What should Claude call you?</label>
+            <input type="text" pInputText placeholder="e.g. Mike, AI" />
+          </div>
+        </div>
+
+        <div class="form-group mt-4">
+          <label>What best describes your work?</label>
+          <p-select 
+              [options]="jobs" 
+              [(ngModel)]="selectedJob" 
+              optionLabel="label" 
+              placeholder="Selecciona una opción" 
+              styleClass="w-full">
+          </p-select>
+        </div>
+
+        <div class="form-group mt-4">
+          <label>What personal preferences should VeraDoc consider?</label>
+          <textarea pInputTextarea rows="4" placeholder="e.g. I primarily code in Python (not a coding beginner)"></textarea>
+        </div>
+
+        <hr class="separator" />
+
+        <h3>Notifications</h3>
+        <div class="setting-row">
+          <div>
+            <p class="row-title">Response Completions</p>
+            <p class="row-subtitle">Receive notifications when VeraDoc has finished a response.</p>
+          </div>
+          <p-toggleswitch 
+              [(ngModel)]="notificationsEnabled" 
+              ariaLabelledBy="notif-label">
+          </p-toggleswitch>
+        </div>
+      </section>
+    }
+
+    @if (selectedSection === 'account') {
+      <section>
+        <h3>Account</h3>
+        <div class="settings-list">
+          <div class="settings-item">
+            <span>Log out of all devices</span>
+            <button class="btn btn-outline" (click)="onLogout()">Log out</button>
+          </div>
+
+          <div class="settings-item">
+            <span>Delete your account</span>
+            <button class="btn btn-danger" (click)="onDeleteAccount()">Delete account</button>
+          </div>
+        </div>
+      </section>
+    }
+
+    <p-confirmDialog [style]="{ width: '450px' }" />
+  </main>
+</div>

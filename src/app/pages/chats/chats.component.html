@@ -1,0 +1,84 @@
+<div class="chat-wrapper">
+    <div class="chat-history" #scrollContainer (scroll)="onScroll()">
+        @for (msg of messages; track $index) {
+            @if (msg.role === 'user') {
+                <div class="message-row user">
+                    <div class="message-bubble user-bubble">
+                        {{ msg.content }}
+                    </div>
+                </div>
+            }
+
+            @if (msg.role === 'assistant') {
+                <div class="message-row ai">
+                    <div class="ai-avatar">
+                        @if (isThinking && $last) {
+                            <i class="pi pi-spin pi-spinner sparkle-icon"></i>
+                        } @else {
+                            <span class="sparkle">✴</span>
+                        }
+                    </div>
+                    <div class="message-content">
+                        <markdown [data]="msg.content"></markdown>
+
+                        @if (isThinking && $last) {
+                            <p>{{ messageThinking }}</p>
+                        } @else {
+                            <div class="message-actions">
+                                <i class="pi pi-copy" pTooltip="Copiar" [cdkCopyToClipboard]="msg.content"
+                                    (cdkCopyToClipboardCopied)="onCopySuccess()">
+                                </i>
+                                <!--<i class="pi pi-thumbs-up"></i>
+                                <i class="pi pi-thumbs-down"></i>
+                                <i class="pi pi-refresh"></i>-->
+                                <i class="pi pi-download" (click)="onDownloadChat(msg.content)"></i>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="input-container">
+        <div class="input-container-inner">
+            <div class="input-card p-shadow-1">
+                <textarea #chatTextarea
+                    class="chat-input" 
+                    pInputTextarea autoResize="true"
+                    autoResize="true"
+                    rows="1"
+                    placeholder="Waiting for your question ..." 
+                    [(ngModel)]="currentQuestion"
+                    (keydown)="onHandleKeyDown($event, chatTextarea)"
+                    (input)="autoGrow(chatTextarea)">
+                </textarea>
+
+                <div class="input-footer">
+                    <!--<p-button icon="pi pi-plus" [text]="true" severity="secondary"></p-button>-->
+                    <div class="flex items-center gap-2">
+                        <label for="ragToggle" class="text-sm text-gray-500 font-normal" style="padding-top: 3px;">Knowledge Base</label>
+                        <p-toggleswitch 
+                            inputId="ragToggle"
+                            [(ngModel)]="activeRAG"
+                        />
+                    </div>
+                    <div class="input-meta">
+                        <span class="model-tag">Llama 3.1 
+                            <!--<i class="pi pi-chevron-down"></i>-->
+                        </span>
+                        <p-button 
+                            (onClick)="sendChat()" 
+                            [icon]="isThinking ? 'pi pi-stop-circle' : 'pi pi-send'"
+                            [style]="{'color': '#000000', 'border': 'none'}"
+                            [text]="true"
+                            [severity]="isThinking ? 'danger' : 'primary'"
+                            [disabled]="!isThinking && !currentQuestion.trim()">
+                        </p-button>
+                    </div>
+                </div>
+            </div>
+            <small class="disclaimer">VeraDoc is AI and can make mistakes. Please verify the answers..</small>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,171 @@
+.settings-container {
+  display: flex;
+  height: calc(100vh - 65px);
+  background-color: #f9f9f9;
+  font-family: "Inter", sans-serif;
+}
+
+/* Sidebar Submenu */
+.settings-sidebar {
+  width: 260px;
+  padding: 2rem 1rem;
+  border-right: 1px solid #e5e5e5;
+}
+
+.settings-sidebar h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-left: 0.75rem;
+}
+
+.settings-sidebar nav button {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #37352f;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.settings-sidebar nav button:hover {
+  background-color: #eeeeec;
+}
+
+.settings-sidebar nav button.active {
+  background-color: #eeeeec;
+  font-weight: 500;
+}
+
+/* Main Content Area */
+.settings-content {
+  flex: 1;
+  padding: 2rem 4rem;
+  overflow-y: auto;
+  max-width: 900px; /* Keeps content readable */
+}
+
+.settings-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Styles */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  color: #6b6a65;
+  font-weight: 500;
+}
+
+.input-with-avatar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  background: #37352f;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+input[pInputText], textarea[pInputTextarea] {
+  border: 1px solid #d1d1cf;
+  border-radius: 8px;
+  padding: 10px;
+  width: 90%;
+}
+
+.separator {
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid #e5e5e5;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.row-title {
+  font-weight: 500;
+  margin: 0;
+}
+
+.row-subtitle {
+  font-size: 0.85rem;
+  color: #6b6a65;
+  margin: 4px 0 0 0;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.btn-outline {
+  background: white;
+  border: 1px solid #d1d1d1;
+}
+
+.btn-danger {
+  background: #0a0a0a; /* Based on the image's dark button */
+  color: white;
+  border: none;
+}
+
+/* Organization ID Box */
+.copy-box {
+  background: #f5f5f5;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #666;
+}

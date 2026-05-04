@@ -1,0 +1,180 @@
+<div class="app-container" [class.collapsed]="!isExpanded()">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <p-button 
+        icon="pi pi-bars" 
+        [text]="true" 
+        severity="secondary" 
+        (onClick)="onToggleSidebar()" 
+        [rounded]="true"
+        pTooltip="Toggle menu" 
+        tooltipPosition="right" 
+        [showDelay]="800">
+      </p-button>
+
+      @if (isExpanded()) {
+        <span class="ml-3 font-semibold text-xl logo-text" (click)="onGoHome()">VeraDoc</span>
+      }
+    </div>
+
+    <div class="px-2 mb-5">
+      <p-button 
+        icon="pi pi-plus"      
+        [label]="isExpanded() ? 'New conversation' : ''"  
+        severity="secondary"
+        [text]="true" 
+        [rounded]="true"
+        (onClick)="onNavigateTo('/conversation')" 
+        [styleClass]="'w-full flex align-items-center border-none outline-none ' +
+          (activeRoute === '/conversation' ? 'menu-item-active ' : ' ') +
+          (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
+      </p-button>
+    </div>
+    
+    <nav class="flex flex-column gap-1 px-2">
+      <p-button 
+        icon="pi pi-search" 
+        [label]="isExpanded() ? 'Find chats' : ''" 
+        [text]="true" 
+        [rounded]="true"
+        severity="secondary" 
+        (onClick)="openSearch()"        
+        [styleClass]="'w-full flex align-items-center border-none outline-none ' +
+          (activeRoute === '/find' ? 'menu-item-active ' : ' ') +
+          (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
+      </p-button>
+
+      <p-button 
+        icon="pi pi-comments" 
+        [label]="isExpanded() ? 'Chats' : ''" 
+        [text]="true" 
+        [rounded]="true"
+        severity="secondary" 
+        (onClick)="onNavigateTo('/chats')"
+        [styleClass]="'w-full flex align-items-center border-none outline-none ' +
+          (activeRoute === '/chats' ? 'menu-item-active ' : ' ') +
+          (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
+      </p-button>
+
+      <p-button 
+        icon="pi pi-folder" 
+        [label]="isExpanded() ? 'Collections' : ''" 
+        [text]="true"
+        [rounded]="true"
+        severity="secondary" 
+        (onClick)="onNavigateTo('/collections')"
+        [styleClass]="'w-full flex align-items-center border-none outline-none ' +
+          (activeRoute === '/collections' ? 'menu-item-active ' : ' ') +
+          (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
+      </p-button>
+      
+      @if (authService.currentUser()?.is_superuser == true) {
+        <p-button
+          icon="pi pi-users"
+          [label]="isExpanded() ? 'Users' : ''" [text]="true"
+          [rounded]="true"
+          severity="secondary" 
+          (onClick)="onNavigateTo('/users')" 
+          [styleClass]="'w-full flex align-items-center border-none outline-none ' +
+                  (activeRoute === '/users' ? 'menu-item-active ' : ' ') +
+                  (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
+        </p-button>
+      }
+
+      @if (authService.currentUser()?.is_superuser == true) {
+        <p-button
+          icon="pi pi-microchip-ai"
+          [label]="isExpanded() ? 'Models' : ''" [text]="true"
+          [rounded]="true"
+          severity="secondary" 
+          (onClick)="onNavigateTo('/models')" 
+          [styleClass]="'w-full flex align-items-center border-none outline-none ' +
+                  (activeRoute === '/models' ? 'menu-item-active ' : ' ') +
+                  (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
+        </p-button>
+      }      
+    </nav>
+
+    @if (isExpanded()) {
+      <div class="sidebar-section">
+        <button class="section-header" (click)="isRecientesOpen = !isRecientesOpen" pRipple>
+          <i class="pi" [ngClass]="isRecientesOpen ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+          <span class="title">Recent Conversations</span>
+        </button>
+        
+        <div class="recent-list" [class.collapsed]="!isRecientesOpen">
+          <div class="recent-item" *ngFor="let chat of recentConversations" pRipple 
+            (click)="onSelectChat(chat.id)"
+            style="cursor: pointer;">
+            <span class="chat-title">{{ chat.title }}</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="sidebar-footer">
+      <p-tieredMenu #menu [model]="profileMenuItems" [popup]="true" appendTo="body"></p-tieredMenu>
+      
+      <div class="profile-button" (click)="menu.toggle($event)" [class.collapsed-btn]="!isExpanded()">
+        <div class="avatar-circle">{{ authService.currentUser()?.name | slice:0:2 | uppercase }}</div>
+        
+        @if (isExpanded()) {
+          <div class="user-info">
+            <span class="user-name">{{name}}</span>
+            <span class="user-plan">Free plan</span>
+          </div>
+
+          <i class="pi pi-chevron-up ml-auto text-xs text-gray-400"></i>
+        }
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-header-bar">
+      @if (!selecteHeaderTitle?.rootPath) {
+        <div class="header-menu-group">
+          <h1>{{selecteHeaderTitle?.title}}</h1>
+          <p class="subtitle">{{selecteHeaderTitle?.subtitle}}</p>
+        </div>
+      }
+      @else {
+        <div class="header-return-group">
+          <p-button icon="pi pi-arrow-left" aria-label="Help" (onClick)="onReturnTo()" size="small"
+            [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}" />
+        </div>
+      }
+
+      @if (authService.currentUser()?.is_superuser == true) {
+        <div class="header-model-wrapper">
+          <p-button styleClass="model-selector-pbutton"
+            [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none', 'width': '100%'}"
+            (click)="onOpenRunningModels()">
+              <ng-template pTemplate="content">
+                <div class="btn-layout">
+                    <i class="pi pi-microchip-ai"></i>
+                    <span class="btn-label">Select a model to load</span>
+                    <i class="pi pi-chevron-down chevron-small"></i>
+                </div>
+              </ng-template>
+            </p-button>
+        </div>
+      }
+
+      <div class="header-content-wrapper">
+        <p-button icon="pi pi-question-circle" aria-label="Help" size="small" (onClick)="onHelp()"
+          [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}"/>
+        <!--<p-button icon="pi pi-sun" aria-label="Help" 
+          [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}" />-->
+      </div>
+    </header>
+
+    <div class="chat-viewport">
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>      
+    </div>
+  </main>
+</div>
+
+<p-toast />

@@ -1,0 +1,128 @@
+<main class="flex-1 p-6 overflow-y-auto overflow-x-hidden bg-gray-950">  
+    <header class="flex justify-content-between items-center mb-8">
+        <div class="flex items-center gap-2">                
+            <p-iconfield iconPosition="left" class="p-inputtext-sm p-0" style="width: 250px">
+                <p-inputicon class="pi pi-search"></p-inputicon>
+                <input 
+                    type="text" 
+                    pInputText 
+                    [(ngModel)]="searchQuery" 
+                    placeholder="Filter by model name" 
+                    class="p-inputtext-sm bg-[#0b0f19] border-gray-800 rounded-lg"
+                    style="width: 100%"
+                    (keydown)="onKeyDown($event)"/>
+            </p-iconfield> 
+            <p-select 
+                [options]="filterModels" [(ngModel)]="filterModel" optionLabel="name" 
+                size="small" placeholder="Select a model type" style="width: 330px; font-size: 15px;"
+                (onChange)="onFilterModels(filterModel.key)">
+                <ng-template #selectedItem let-selectedModelType>
+                    <div class="flex items-center gap-2" *ngIf="selectedModelType">
+                        <i class="pi pi-filter"></i>Filter:
+                        <div>{{ selectedModelType.text }}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-modelType #item>
+                    <div class="flex items-center gap-2">
+                        <div>{{ modelType.text }}</div>
+                    </div>
+                </ng-template>
+                <ng-template #header>
+                    <div class="font-medium p-3">Available Model Types</div>
+                </ng-template>
+            </p-select>            
+            <!--<p-button icon="pi pi-filter" 
+                [styleClass]="filterModel === 'image-text-to-text' ? 'active-dark-btn' : 'inactive-gray-btn'" 
+                label="Sort: Image Text to Text" severity="secondary" size="small" (onClick)="onFilterModels('image-text-to-text')">
+            </p-button>            
+            <p-button icon="pi pi-filter" 
+                [styleClass]="filterModel === 'feature-extraction' ? 'active-dark-btn' : 'inactive-gray-btn'" 
+                label="Filter: Feature Extraction" severity="secondary" size="small" (onClick)="onFilterModels('feature-extraction')">
+            </p-button>-->                                     
+        </div>
+
+        <div class="flex items-center gap-2">
+            <p-button icon="pi pi-sort-alt" 
+                [styleClass]="sortModel === 'likes' ? 'active-dark-btn' : 'inactive-gray-btn'" 
+                label="Sort: Likes" severity="secondary" size="small" (onClick)="onOrderModels('likes')">
+            </p-button>            
+            <p-button icon="pi pi-sort-alt" 
+                [styleClass]="sortModel === 'downloads' ? 'active-dark-btn' : 'inactive-gray-btn'"
+                label="Sort: Downloads" severity="secondary" size="small" (onClick)="onOrderModels('downloads')">
+            </p-button>            
+            <p-button icon="pi pi-sort-alt"
+                [styleClass]="sortModel === 'createdAt' ? 'active-dark-btn' : 'inactive-gray-btn'"
+                label="Sort: Created at" severity="secondary" size="small" (onClick)="onOrderModels('createdAt')">
+            </p-button> 
+            <p-button icon="pi pi-chevron-left" aria-label="Previous" (onClick)="onPaginatedPrev()" [disabled]="page === 1" size="small"
+                [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}"/>
+            <p-button icon="pi pi-chevron-right" aria-label="Next" (onClick)="onPaginatedNext()" [disabled]="!hasMorePages" size="small"
+                [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}" />  
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 justify-content-center gap-4">
+        @if (loading) {
+            <div style="margin-top: 150px;">
+                <p-progressSpinner 
+                    strokeWidth="4" fill="transparent" 
+                    animationDuration=".5s" 
+                    [style]="{width: '50px', height: '50px'}">
+                </p-progressSpinner>
+                <h3>Please wait...</h3>
+                <p>Recovering compatible models for VeraDoc</p>
+            </div>
+        }
+        @else {            
+            <p-card *ngFor="let model of models" 
+                class="model-card border border-gray-800 bg-gray-900 hover:border-blue-500 cursor-pointer shadow-none">
+                <ng-template pTemplate="header">
+                    <div class="flex items-center gap-2 p-4 pb-0">
+                         @if (model.author?.avatar_url) {
+                            <img 
+                                [src]="model.author!.avatar_url!" 
+                                [alt]="model.author!.name"
+                                style="width: 30px"
+                                
+                                (error)="onAvatarError($event)"
+                            />
+                        } @else { 
+                            <i class="pi pi-microchip-ai text-blue-400" style="font-size: 30px"></i>                            
+                        }
+
+                        <span class="text-gray-400 font-medium">
+                            <span class="text-white font-bold">{{model.id}}</span>
+                        </span>
+                        <div class="flex flex-1"></div>
+                        <i class="pi pi-cloud-download text-blue-400" style="font-size: 20px" (click)="onPullModel(model.id)"></i>                  
+                    </div>               
+                </ng-template>
+
+                <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                    <span class="flex items-center gap-1">
+                        <i class="pi pi-align-left text-[10px]"></i> {{model.pipelineTag}}
+                    </span>
+
+                    <span class="flex items-center gap-1">
+                        <i class="pi pi-database text-[10px]"></i> {{ extractParams(model.id) }}
+                    </span>
+
+                    <span>Updated {{model.updated | timeAgo }}</span>
+                        <span class="flex items-center gap-1">
+                        <i class="pi pi-download text-[10px]"></i> {{model.downloads | abbreviateNumber }}
+                    </span>
+
+                    <span class="flex items-center gap-1">
+                        <i class="pi pi-heart text-[10px]"></i> {{model.likes | abbreviateNumber }}
+                    </span>
+                </div>
+            </p-card>
+        }
+    </div> 
+</main>
+
+<p-drawer [(visible)]="showTerminal" position="bottom" [style]="{ height: '50%' }">
+    <app-terminal-log #terminalModel [title]="'Ollama Engine Logs'" [style]="{ height: '100%' }"/>
+</p-drawer>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

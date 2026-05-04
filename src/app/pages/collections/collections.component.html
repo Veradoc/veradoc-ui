@@ -1,0 +1,68 @@
+<div class="collections-wrapper">
+  <header class="view-header">
+    <p-button icon="pi pi-plus" label="New Collection" size="small"
+      [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}"
+      (onClick)="openDialog()"/> 
+  </header>
+  
+  <div class="grid p-fluid">
+    <div class="col-12 md:col-6 lg:col-4 p-3" *ngFor="let col of collections">
+      <p-card class="collection-card shadow-1 hover:shadow-4 border-round-xl transition-all h-full">
+        <ng-template pTemplate="header">
+            <div class="collection-card-header h-4rem border-round-top-xl flex align-items-center px-4" [style]="{'display': 'flex', 'justify-content': 'space-between'}">
+                <i class="pi pi-folder-open text-2xl"></i>
+                <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="secondary"
+                  (onClick)="onRemoveCollection(col)"></p-button>
+            </div>
+        </ng-template>
+        
+        <h2 class="text-xl font-bold text-gray-800 mb-2 m-0">{{col.path}}</h2>
+        <div class="flex align-items-center gap-2 text-gray-600 mb-4">
+          <i class="pi pi-file"></i>
+          <span class="text-sm font-medium">{{col.total_files}} Documents</span>
+        </div>
+        
+        <ng-template pTemplate="footer">
+          <div class="flex justify-content-between align-items-center pt-3 border-t-1 border-gray-100">
+            <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Updated {{col.last_file_creation}}</span>
+            <p-button icon="pi pi-arrow-right" [rounded]="true" [text]="true" severity="secondary" (onClick)="onOpenFiles(col)"></p-button>
+          </div> 
+        </ng-template>
+      </p-card>
+    </div>
+  </div>
+
+  <p-dialog 
+    header="Collection Details"  
+    [(visible)]="collectionDialog"
+    [style]="{ width: '450px' }"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    styleClass="claude-dialog">
+    <ng-template pTemplate="content">
+      <form [formGroup]="collectionForm" class="form-container">
+          <div class="form-field">
+            <label for="name">Name *</label>
+            <input 
+              id="name" type="text" pInputText
+              formControlName="name" 
+              placeholder="Collection name" class="w-full" 
+              [class.ng-invalid]="collectionForm.get('name')?.invalid && collectionForm.get('name')?.touched"
+              [class.ng-dirty]="collectionForm.get('name')?.invalid && collectionForm.get('name')?.touched"/>
+              <small class="p-error" 
+                *ngIf="collectionForm.get('name')?.invalid && collectionForm.get('name')?.touched">
+                Collection Name is required.
+              </small>              
+          </div>        
+      </form>
+    </ng-template>
+  
+    <ng-template pTemplate="footer">
+      <div class="dialog-footer">
+        <p-button label="Cancel" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="onHideDialog()" />
+        <p-button label="Save Collection" icon="pi pi-check" [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}" (onClick)="onSaveCollection()" [disabled]="collectionForm.invalid"/>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

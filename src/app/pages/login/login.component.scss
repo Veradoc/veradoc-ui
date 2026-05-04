@@ -1,0 +1,125 @@
+.login-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 1. Base background color */
+  background-color: #fdfcf7; 
+
+  /* 2. The Dotted Grid */
+  /* radial-gradient(color size, transparent) */
+  background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+  
+  /* 3. The spacing between dots (20px by 20px) */
+  background-size: 24px 24px;
+}
+
+.login-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid #e5e7eb;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+
+  .brand-logo img {
+    height: 56px;
+    width: auto;
+  }
+
+  .brand-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0.5rem 0 0.25rem 0;
+  }
+
+  .brand-subtitle {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin: 0;
+  }
+}
+
+/* Google Button Styling */
+.google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: white;
+  border: 1px solid #e2e2e2;
+  padding: 12px;
+  border-radius: 12px;
+  font-family: inherit; /* This takes the font from the parent container */
+  font-size: 14px;
+  letter-spacing: -0.01em; /* Common for modern sans-serifs */
+  color: #374151; /* A softer dark gray often used in modern UIs */
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.google-btn:hover {
+  background-color: #f7f7f7;
+}
+
+.google-btn img {
+  width: 20px;
+}
+
+/* The "or" Divider */
+.divider {
+  margin: 24px 0;
+  position: relative;
+  border-bottom: 1px solid #eee;
+}
+
+.divider span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 0 15px;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.login-form {
+  .footer-links {
+    text-align: center;
+    margin-top: 1rem;
+  }  
+}
+
+/* FOOTER STYLES */
+/* The Grey Footer Box */
+.waitlist-footer {
+  background-color: #f4f4f5; /* Light grey from your image */
+  padding: 1.5rem;
+  text-align: center;
+  border-top: 1px solid #e5e7eb;
+  margin-top: auto; /* Pushes it to the bottom if the card grows */
+}
+
+/* The Coral/Pink Link */
+.waitlist-link {
+  color: #e6566e; /* Color matched from image */
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.waitlist-link:hover {
+  text-decoration: underline;
+}

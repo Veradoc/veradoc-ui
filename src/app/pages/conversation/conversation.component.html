@@ -1,0 +1,72 @@
+<div class="layout-wrapper">
+  <header class="header">
+    <div class="plan-status">
+      <!--Free plan • <a href="#" class="upgrade-link">Update</a>-->
+      Free plan
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="greeting-container">
+      <span class="sparkle">✦</span>
+      <!--<h1 class="user-greeting">Good morning, {{ authService.currentUser()?.name }}</h1>-->
+      <h1 class="user-greeting">{{ greeting }}</h1>
+    </div>
+
+    <div class="prompt-card p-shadow-1">
+      <textarea
+        #chatTextarea
+        class="prompt-input"
+        pInputTextarea
+        autoResize="true"
+        rows="1"  
+        placeholder="How can I help you today?"
+        [(ngModel)]="message"
+        (keydown)="onHandleKeyDown($event, chatTextarea)"
+        (input)="onAutoGrow(chatTextarea)">
+      </textarea>
+      
+      <div class="prompt-footer">
+        <!--<p-button icon="pi pi-plus" [rounded]="true" [text]="true" severity="secondary"></p-button>-->
+        <div class="flex items-center gap-2">
+            <label for="ragToggle" class="text-sm text-gray-500 font-normal" style="padding-top: 3px;">Knowledge Base</label>
+            <p-toggleswitch 
+                inputId="ragToggle"
+                [(ngModel)]="activeRAG"
+            />
+        </div>        
+        
+        <div class="model-selector">
+          <span class="model-name">Sonnet 4.6</span>
+          <!--<i class="pi pi-chevron-down" style="font-size: 0.7rem"></i>-->
+          <p-button 
+            #messageButton
+            (onClick)="sendChat($event, messageButton.el.nativeElement)" 
+            [icon]="'pi pi-send'"
+            [style]="{'color': '#000000', 'border': 'none'}"
+            [text]="true"
+            [severity]="'primary'"
+            [disabled]="!message || !message.trim()">
+          </p-button>                    
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="actions-grid">
+      <p-chip label="Escribir" icon="pi pi-pencil" class="custom-chip"></p-chip>
+      <p-chip label="Aprender" icon="pi pi-book" class="custom-chip"></p-chip>
+      <p-chip label="Código" icon="pi pi-code" class="custom-chip"></p-chip>
+      <p-chip label="Asuntos personales" icon="pi pi-coffee" class="custom-chip"></p-chip>
+    </div>-->
+
+    <div class="footer-action">
+      <!--<p-button 
+        label="VeraDoc Selection" 
+        icon="pi pi-lightbulb" 
+        [outlined]="true" 
+        severity="secondary" 
+        styleClass="p-button-rounded selection-btn">
+      </p-button>-->
+    </div>
+  </main>
+</div>

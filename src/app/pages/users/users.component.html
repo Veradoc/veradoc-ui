@@ -1,0 +1,128 @@
+<div class="users-container">
+  <header class="view-header">
+    <p-button icon="pi pi-plus" label="New User"
+      [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}"
+      (onClick)="openDialog()"/> 
+  </header>
+
+  <div class="table-card">
+    <p-table [value]="users" responsiveLayout="scroll" [rowHover]="true" styleClass="p-datatable-clean">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td class="font-medium">{{ user.name }}</td>
+          <td class="text-secondary">{{ user.email }}</td>
+          <td>
+            <span [class]="'role-badge ' + (user.is_superuser ? 'admin' : 'member')">
+              {{ user.is_superuser ? 'Admin' : 'Member' }}
+            </span>
+          </td>
+          <td>
+            <span class="status-indicator">
+              <span [class]="'dot ' + (user.is_active ? 'active' : 'inactive')"></span>
+              {{ user.is_active ? 'Active' : 'Offline' }}
+            </span>
+          </td>
+          <td class="text-right action-cells">
+            <button class="icon-btn edit" (click)="openDialog(user)" title="Edit user">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button class="icon-btn delete" (click)="onDeleteUser(user)" title="Delete user">
+              <i class="pi pi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-dialog 
+      header="User Details" 
+      [(visible)]="userDialog"
+      [style]="{ width: '450px' }"
+      [modal]="true" 
+      [draggable]="false"
+      [resizable]="false"
+      styleClass="claude-dialog">
+      <ng-template pTemplate="content">
+        <form [formGroup]="userForm" class="form-container">
+          <div class="form-field">
+            <label for="name">Full Name *</label>
+            <input 
+              id="name" type="text" pInputText
+              formControlName="name"
+              placeholder="Name" class="w-full"
+              [class.ng-invalid]="userForm.get('name')?.invalid && userForm.get('name')?.touched"
+              [class.ng-dirty]="userForm.get('name')?.invalid && userForm.get('name')?.touched"/>
+            <small class="p-error" 
+              *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">Full Name is required.
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label for="email">Email Address *</label>
+            <input 
+              type="email" pInputText id="email"
+              formControlName="email"
+              placeholder="Email" class="w-full" 
+              [class.ng-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+              [class.ng-dirty]="userForm.get('email')?.invalid && userForm.get('email')?.touched"/>
+              <small class="p-error" 
+                *ngIf="userForm.get('email')?.hasError('required') && userForm.get('email')?.touched">
+                Email Address is required.
+              </small>
+              <small class="p-error" 
+                *ngIf="userForm.get('email')?.hasError('email') && userForm.get('email')?.touched">
+                Email format is invalid.
+              </small>              
+          </div>
+
+          <div class="form-field" *ngIf="!user.id">
+            <label for="password">Password *</label>
+            <input 
+              type="password" pInputText id="password"
+              formControlName="password"
+              class="w-full" 
+              [class.ng-invalid]="userForm.get('password')?.invalid && userForm.get('password')?.touched"
+              [class.ng-dirty]="userForm.get('password')?.invalid && userForm.get('password')?.touched"/>
+            <small class="p-error" 
+              *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched">
+              Password is required.
+            </small>
+          </div>
+
+          <div class="checkbox-group">
+            <div class="checkbox-item">
+              <p-checkbox 
+                formControlName="is_active"
+                [binary]="true" inputId="active" />
+              <label for="active">Active Status</label>
+            </div>
+            <div class="checkbox-item">
+              <p-checkbox
+                formControlName="is_superuser"
+                [binary]="true" inputId="superuser" />
+              <label for="superuser">Superuser Access</label>
+            </div>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="dialog-footer">
+          <p-button label="Cancel" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="onHideDialog()" />
+          <p-button label="Save User" icon="pi pi-check" [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}" (onClick)="onSaveUser()" [disabled]="userForm.invalid"/>
+        </div>
+      </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog [style]="{ width: '450px' }" />
+  </div>
+</div>

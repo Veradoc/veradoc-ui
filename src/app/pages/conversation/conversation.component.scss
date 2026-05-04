@@ -1,0 +1,208 @@
+/* Layout & Background */
+.layout-wrapper {
+  background-color: #f9f8f6; /* Soft off-white */
+  height: calc(100vh - 65px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #37352f;
+}
+
+.header {
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.plan-status {
+  font-size: 0.85rem;
+  color: #7d7c78;
+  background: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: 1px solid #e2e1de;
+}
+
+.upgrade-link {
+  color: #37352f;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+/* Greeting */
+.main-content {
+  width: 100%;
+  max-width: 800px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.greeting-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 3rem;
+}
+
+.sparkle {
+  display: inline-block; /* Essential: transforms like rotate don't work on inline elements */  
+  color: #d97706; /* Muted orange/amber */
+  font-size: 2.5rem;
+
+  /* Animation properties */
+  //animation: spin 2s linear infinite; /* 4s is the speed, 'linear' makes it constant */  
+}
+
+/* The rotation logic */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.user-greeting {
+  font-weight: 400;
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+/* The Prompt Card */
+.prompt-card {
+  background: #ffffff;
+  border: 1px solid #e2e1de;
+  border-radius: 24px;
+  padding: 1.5rem;
+  transition: border-color 0.2s;
+  overflow: hidden;  
+}
+
+.prompt-card:focus-within {
+  border-color: #c2c1be;
+}
+
+.prompt-input {
+  width: 100%;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  font-size: 1rem;
+  padding: 0;
+  //resize: none;
+  display: block;
+}
+
+.prompt-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.model-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7d7c78;
+  cursor: pointer;
+}
+
+.model-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Actions */
+.actions-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 2rem;
+}
+
+::ng-deep .custom-chip.p-chip {
+  background: #ffffff;
+  border: 1px solid #e2e1de;
+  color: #37352f;
+  font-weight: 400;
+  padding: 0 10px;
+}
+
+.footer-action {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+::ng-deep .selection-btn {
+  background: #ffffff !important;
+  border-color: #e2e1de !important;
+  color: #37352f !important;
+  font-size: 0.85rem !important;
+}
+
+/**/
+.dropdown-menu {
+  position: absolute;
+  top: 40px; /* Space below button */
+  left: 0;
+  width: 240px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  padding: 8px 0;
+}
+
+.menu-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  font-size: 14px;
+  color: #1e293b;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background-color: #f1f5f9;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.menu-divider {
+  margin: 4px 0;
+  border: 0;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Specific item styles */
+.text-blue {
+  color: #3b82f6;
+}
+
+.icon-sm {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.text-blue .icon-sm {
+  color: #3b82f6;
+}

@@ -1,0 +1,273 @@
+.chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 65px);
+  background-color: #f9f9f9;
+}
+
+/* Chat History Area */
+.chat-history {
+flex: 1;
+  overflow-y: auto;
+  /* Adjust the 3rd value (bottom padding) to ensure 
+     the last message clears the fixed input box */
+  padding: 2rem 20% 200px 20%; 
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Message Rows */
+.message-row {
+  display: flex;
+  width: 100%;
+}
+
+.message-row.user {
+  justify-content: flex-end;
+}
+
+.message-row.ai {
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+/* Bubbles */
+.message-bubble {
+  max-width: 80%;
+  padding: 12px 20px;
+  border-radius: 18px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.user-bubble {
+  background-color: #f0f0f0; /* Light gray for user */
+  color: #37352f;
+  border-radius: 18px 18px 4px 18px;
+}
+
+.ai-avatar .sparkle {
+  color: #e5976b;
+  font-size: 1.5rem;
+}
+
+.message-content p {
+  margin: 0 0 10px 0;
+  //white-space: pre-wrap; /* This preserves newlines and wraps text */
+  //word-wrap: break-word; /* Ensures long words don't overflow */
+}
+
+.message-actions {
+  display: flex;
+  gap: 12px;
+  color: #a0a0a0;
+  font-size: 0.85rem;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+/* Floating Bottom Input */
+.input-container {
+  position: fixed;
+  background-color: #f9f9f9;
+  bottom: 0;
+  left: 260px;
+  right: 0;
+  padding: 20px;
+  z-index: 10;
+  /* Gemini Style: Gradient top to solid bottom */
+  /* This makes the top of the container transparent and the bottom solid */
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #f9f9f9 20%, /* Text starts fading here */
+    #f9f9f9 100% /* Becomes fully solid behind the box */
+  );
+  
+  /* Pointer-events: none allows you to click "through" the transparent 
+     top part of the gradient to select text if needed */
+  pointer-events: none;
+}
+
+/* This inner wrapper does the actual centering */
+.input-container-inner {
+  max-width: 850px;      /* Adjust this to match the width of your chat bubbles */
+  margin: 0 auto;        /* This centers the block horizontally */
+  width: 100%;           /* Ensures it takes up the space until the max-width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.input-card {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e1de;
+  border-radius: 20px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+
+  /* Gemini-like soft elevation */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+/* Optional: Make shadow stronger when typing */
+.input-card:focus-within {
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.chat-input {
+  width: 100%;
+  max-height: 180px;
+  overflow-y: auto !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;      /* Removes the default browser focus ring */
+  font-size: 1rem;
+  padding: 10px 0;
+}
+
+.input-footer {
+  display: flex;
+  justify-content: space-between;
+  //justify-content: right;
+  align-items: center;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 5px;
+}
+
+.input-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #7d7c78;
+  font-size: 0.85rem;
+}
+
+.disclaimer {
+  margin-top: 10px;
+  color: #9b9b9b;
+  font-size: 0.75rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .chat-history, .input-container {
+    padding: 20px 5%;
+  }
+}
+
+/* Make the stop icon look distinct */
+:host ::ng-deep .p-button.p-button-danger {
+    color: #ef4444 !important;
+}
+
+/* Optional pulse effect while generating */
+.pi-stop-circle {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Chat icon configuration */
+@keyframes sparkle-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sparkle-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #D97706;
+  
+  /* This creates the 4-pointed star shape without an SVG */
+  clip-path: polygon(
+    50% 0%, 61% 39%, 100% 50%, 61% 61%, 
+    50% 100%, 39% 61%, 0% 50%, 39% 39%
+  );
+}
+
+.sparkle-spin {
+  animation: sparkle-spin 1s linear infinite;
+  transform-origin: center;
+  display: inline-block;
+}
+
+.p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
+  background-color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+// Style Markdonw code
+::ng-deep markdown {
+  pre {
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+    font-size: 0.3rem;
+    line-height: 1.7;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    position: relative;
+
+    // Language label in the top-right corner
+    &[class*="language-"]::before {
+      content: attr(class);
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  pre code {
+    font-size: 0.75rem !important;
+  }
+
+  // Inline code
+  code:not([class*="language-"]) {
+    background-color: rgba(255,255,255,0.1);
+    color: #e06c75;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-family: 'Fira Code', monospace;
+  }
+
+  // Better font if available
+  pre, code {
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+  }  
+}
+
+/* Change background to black when switch is ON */
+::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
+    background: #1a1a1a !important;
+}
+
+/* Optional: Change the border color when ON to match the black theme */
+::ng-deep .p-toggleswitch.p-toggleswitch-checked:not(.p-disabled):hover .p-toggleswitch-slider {
+    background: #000000 !important;
+}
+
+/* Optional: If you want to change the focus ring color to a subtle gray instead of green/blue */
+::ng-deep .p-toggleswitch.p-focus .p-toggleswitch-slider {
+    box-shadow: 0 0 0 0.2rem rgba(150, 150, 150, 0.5) !important;
+}

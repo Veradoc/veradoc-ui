@@ -1,0 +1,191 @@
+.users-container {
+  padding: 1rem;
+  height: calc(100vh - 65px);
+  margin: 0 auto;
+  background-color: #f9f9f9;  
+}
+
+.view-header {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+/* The Card */
+.table-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+}
+
+/* Table Customization */
+::ng-deep .p-datatable-clean .p-datatable-thead>tr>th {
+  background: #f9f9f9;
+  color: #666;
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+::ng-deep .p-datatable-clean .p-datatable-tbody>tr>td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.font-medium {
+  font-weight: 500;
+  color: #111;
+}
+
+.text-secondary {
+  color: #6b7280;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Badges & Indicators */
+.role-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.role-badge.admin {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.role-badge.member {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot.active {
+  background-color: #10b981;
+  box-shadow: 0 0 0 4px #10b98120;
+}
+
+.dot.inactive {
+  background-color: #d1d5db;
+}
+
+/* Action Buttons */
+.icon-btn {
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: all 0.2s;
+  border-radius: 6px;
+}
+
+.icon-btn:hover {
+  background: #f3f4f6;
+  color: #111;
+}
+
+.icon-btn.delete:hover {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+/* Container Spacing */
+.form-container {
+  padding-top: 1rem;
+}
+
+.form-field {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-field label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+/* Checkbox Alignment */
+.checkbox-group {
+  display: flex;
+  gap: 2rem;
+  margin-top: 0.5rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.checkbox-item label {
+  font-size: 0.875rem;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+/* Override PrimeNG Input Style */
+::ng-deep .claude-dialog .p-inputtext {
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  padding: 0.75rem !important;
+  font-size: 0.95rem !important;
+}
+
+::ng-deep .claude-dialog .p-inputtext:focus {
+  border-color: #1a1a1a !important;
+  box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.05) !important;
+}
+
+/* Checkbox Color Fix */
+::ng-deep .p-checkbox .p-checkbox-box.p-highlight {
+  background: #1a1a1a !important;
+  border-color: #1a1a1a !important;
+}
+
+::ng-deep .claude-btn-primary .p-button {
+  background: #1a1a1a !important;
+  border: none !important;
+  padding: 0.6rem 1.2rem;
+  font-weight: 500;
+}
+
+/* Modal Footer Styling */
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border-top: 1px solid #f3f4f6;
+}
