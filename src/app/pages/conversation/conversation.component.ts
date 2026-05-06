@@ -86,7 +86,10 @@ export class ConversationComponent {
       ];
 
       this.router.navigate(['/chats'], { 
-        state: { data: conversation, activeRAG: this.activeRAG } 
+        state: {
+          data: conversation,
+          activeRAG: this.activeRAG // selected by user to start a conversation
+        } 
       });     
     }
   }  

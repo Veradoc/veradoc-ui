@@ -91,10 +91,10 @@ export class LayoutComponent implements OnInit {
     { 
       label: 'Settings',
       icon: 'pi pi-cog',
-      shortcut: '⌘,' ,
+      shortcut: '⌘,',
       command: () => { this.openSettings() },
     },
-    { 
+    /*{ 
       label: 'Language',
       icon: 'pi pi-globe',
           items: [
@@ -107,10 +107,14 @@ export class LayoutComponent implements OnInit {
               command: () => this.changeLanguage('es-ES') 
             },
           ]     
-    },
+    },*/
     { 
       label: 'Get help',
-      icon: 'pi pi-question-circle'
+      icon: 'pi pi-question-circle',
+      command: () => {
+          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, "Our help will be available soon. Please be patient.", BrokerMessageCriticity.WARNING);
+    }       
+
     },
     { separator: true },
     /*{
@@ -200,7 +204,11 @@ export class LayoutComponent implements OnInit {
     this.refSearchChats?.onClose.subscribe((selectedChat) => {
       this.refSearchChats = undefined; // Reset ref
       if (selectedChat) {
-        this.router.navigate(['/chats'], { state: { id: selectedChat.id } });
+        this.router.navigate(['/chats'], {
+          state: {
+            id: selectedChat.id
+          }
+        });
       }
     });
   }    
@@ -213,8 +221,7 @@ export class LayoutComponent implements OnInit {
         this.router.navigate(['/chats'], { 
           state: { 
             data: this.recentChats,
-            activeRAG: true,
-            lastChat: false 
+            activeRAG: true // by default activate knowledge base
           },
           onSameUrlNavigation: 'reload' 
         });        

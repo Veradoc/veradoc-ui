@@ -71,7 +71,8 @@ export class ModelsComponent implements OnInit {
   filterModels: any[] = [
     {"key": "text-generation", text: "Text Generation"},
     {"key": "image-text-to-text", text: "Image/Text to Text Generation"},
-    {"key":"feature-extraction", text: "Features Extraction"} 
+    {"key": "feature-extraction", text: "Features Extraction" },
+    {"key": "sentence-similarity", text: "Sentence Similarity" }
   ];
   showTerminal: boolean = false;
 
@@ -168,9 +169,9 @@ export class ModelsComponent implements OnInit {
     event.target.insertAdjacentHTML('afterend', '<i class="pi pi-microchip-ai text-blue-400" style="font-size: 30px"></i>')
   }
   
-  onPullModel(modelId: string) {
+  onPullModel(model: any) {
     this.confirmationService.confirm({
-      message: `Are you sure you want to pull <b>${modelId}</b>?.`,
+      message: `Are you sure you want to pull <b>${model.id}</b>?.`,
       header: 'Confirm Action',
       icon: 'pi pi-trash',
       acceptLabel: 'Pull',
@@ -180,9 +181,9 @@ export class ModelsComponent implements OnInit {
       accept: async () => {
         this.showTerminal = true;
 
-        this.termLog.info(`> Initiating pullingfor ${modelId}...`);
+        this.termLog.info(`> Initiating pullingfor ${model.id}...`);
 
-        this.ollamaService.pullModelStream(modelId)
+        this.ollamaService.pullModelStream(model)
           .subscribe({
             next: (chunk) => {
               console.log(chunk);

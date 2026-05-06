@@ -81,7 +81,7 @@ export class UsersComponent implements OnInit {
       id: [user?.id ?? ''],
       name: [user?.name ?? '', Validators.required],
       email: [user?.email ?? '', [Validators.required, Validators.email]],
-      password: [user?.password ?? '', user?.id ? [] : Validators.required],
+      password: [user?.password ?? null, user?.id ? [] : Validators.required],
       is_active: [user?.is_active ?? true],
       is_superuser: [user?.is_superuser ?? false],
     });

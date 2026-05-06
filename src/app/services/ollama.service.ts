@@ -43,12 +43,12 @@ export class OllamaService {
         });
     }
     
-    pullModelStream(modelName: string): Observable<any> {
+    pullModelStream(model: any): Observable<any> {
         const headers: any = this.getAuthHeaders();
 
         return new Observable(observer => {
             // Use fetch because HttpClient doesn't support streaming POST bodies easily
-            fetch(`${this.baseUrl}/ollama/pull/${modelName}`, {
+            fetch(`${this.baseUrl}/ollama/pull/${model.id}/${model.pipelineTag}`, {
                 method: 'POST',
                 headers: headers
             }).then(response => {

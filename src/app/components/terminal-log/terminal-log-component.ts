@@ -190,7 +190,7 @@ export interface LogEntry {
   `],
 })
 export class TerminalLogComponent implements AfterViewChecked {
-  @Input() title: string = 'Ollama Engine Logs';
+  @Input() title: string = 'Ollama Model Logs';
   @ViewChild('logBody') private logBody!: ElementRef<HTMLDivElement>;
  
   entries: LogEntry[] = [];

@@ -13,8 +13,13 @@
 }
 
 :host ::ng-deep {
+  .collection-card-header {
+      background-color: #000000 !important;
+      color: #ffffff;
+  }
+
   .collection-card {
-    cursor: pointer;
+    //cursor: pointer;
     background-color: #ffffff;
     
     .p-card-body {
@@ -46,19 +51,19 @@
 }
 
 /* Override PrimeNG Input Style */
-::ng-deep .claude-dialog .p-inputtext {
+::ng-deep .collection-dialog .p-inputtext {
   border: 1px solid #d1d5db !important;
   border-radius: 6px !important;
   padding: 0.75rem !important;
   font-size: 0.95rem !important;
 }
 
-::ng-deep .claude-dialog .p-inputtext:focus {
+::ng-deep .collection-dialog .p-inputtext:focus {
   border-color: #1a1a1a !important;
   box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.05) !important;
 }
 
-/* Primary Button */
+/* Card component styles */
 ::ng-deep .claude-btn-primary .p-button {
   background: #1a1a1a !important;
   border: none !important;
@@ -68,6 +73,15 @@
 
 ::ng-deep .collection-card-header {
   background-color: #f9f9f9 !important;
+}
+
+::ng-deep .collection-remove .p-button-icon {
+  color: #ffffff !important;
+}
+
+::ng-deep .collection-remove .p-button:enabled:hover {
+  background-color: #000000 !important;
+  color: #000000 !important;
 }
 
 /* Modal Footer Styling */

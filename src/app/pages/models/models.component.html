@@ -1,4 +1,4 @@
-<main class="flex-1 p-6 overflow-y-auto overflow-x-hidden bg-gray-950">  
+<main class="models-container flex-1 p-6 overflow-y-auto overflow-x-hidden bg-gray-950">  
     <header class="flex justify-content-between items-center mb-8">
         <div class="flex items-center gap-2">                
             <p-iconfield iconPosition="left" class="p-inputtext-sm p-0" style="width: 250px">
@@ -94,7 +94,7 @@
                             <span class="text-white font-bold">{{model.id}}</span>
                         </span>
                         <div class="flex flex-1"></div>
-                        <i class="pi pi-cloud-download text-blue-400" style="font-size: 20px" (click)="onPullModel(model.id)"></i>                  
+                        <i class="pi pi-cloud-download text-blue-400" style="font-size: 20px" (click)="onPullModel(model)"></i>                  
                     </div>               
                 </ng-template>
 
@@ -122,7 +122,7 @@
 </main>
 
 <p-drawer [(visible)]="showTerminal" position="bottom" [style]="{ height: '50%' }">
-    <app-terminal-log #terminalModel [title]="'Ollama Engine Logs'" [style]="{ height: '100%' }"/>
+    <app-terminal-log #terminalModel [title]="'Ollama Model Logs'" [style]="{ height: '100%' }"/>
 </p-drawer>
 
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

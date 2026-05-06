@@ -9,11 +9,12 @@
     <div class="col-12 md:col-6 lg:col-4 p-3" *ngFor="let col of collections">
       <p-card class="collection-card shadow-1 hover:shadow-4 border-round-xl transition-all h-full">
         <ng-template pTemplate="header">
-            <div class="collection-card-header h-4rem border-round-top-xl flex align-items-center px-4" [style]="{'display': 'flex', 'justify-content': 'space-between'}">
+            <div class="collection-card-header h-4rem border-round-top-xl flex align-items-center px-4" 
+                [style]="{'display': 'flex', 'justify-content': 'space-between'}">
                 <i class="pi pi-folder-open text-2xl"></i>
-                <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="secondary"
+                <p-button class="collection-remove" icon="pi pi-trash" [rounded]="true" [text]="true" severity="secondary"
                   (onClick)="onRemoveCollection(col)"></p-button>
-            </div>
+            </div>  
         </ng-template>
         
         <h2 class="text-xl font-bold text-gray-800 mb-2 m-0">{{col.path}}</h2>
@@ -32,6 +33,7 @@
     </div>
   </div>
 
+  <!-- Collection Dialog-->
   <p-dialog 
     header="Collection Details"  
     [(visible)]="collectionDialog"
@@ -39,7 +41,7 @@
     [modal]="true"
     [draggable]="false"
     [resizable]="false"
-    styleClass="claude-dialog">
+    styleClass="collection-dialog">
     <ng-template pTemplate="content">
       <form [formGroup]="collectionForm" class="form-container">
           <div class="form-field">
@@ -65,4 +67,6 @@
       </div>
     </ng-template>
   </p-dialog>
+
+  <p-confirmDialog [style]="{ width: '450px' }" />
 </div>

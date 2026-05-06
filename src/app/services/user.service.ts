@@ -51,7 +51,7 @@ export class UserService {
     registerUser(user: any): Observable<any> {
         const headers: any = this.getAuthHeaders();
 
-        return this.http.post(`${this.authBaseUrl}/register`, user, { headers });
+        return this.http.post(`${this.authBaseUrl}/register-admin`, user, { headers });
     }
     
     updateUser(user: any): Observable<any> {

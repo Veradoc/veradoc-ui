@@ -64,12 +64,6 @@ export class ChatsComponent implements OnInit, OnDestroy {
       const navigation = this.router.getCurrentNavigation();
       const messageReceived = navigation?.extras?.state?.['data'];
       this.activeRAG = navigation?.extras?.state?.['activeRAG'];
-      const showLastChat = navigation?.extras?.state?.['lastChat'];
-
-      if (showLastChat == null) {
-        this.lastChat();
-        return;
-      }
 
       if (messageReceived) {
         // get the firt chat and get the global conversation id if continue
@@ -80,8 +74,11 @@ export class ChatsComponent implements OnInit, OnDestroy {
           this.isNewConversartion = true;
           this.currentQuestion = messageReceived[0].content;
 
+          //return;
+
           this.sendChat();
         } else {
+          // if is a select conversation load all chats and not send promt to LLM
           this.messages = messageReceived;
         }
       }
@@ -111,11 +108,12 @@ export class ChatsComponent implements OnInit, OnDestroy {
     this.chatService.getLatestConversationMessages()
       .subscribe((data: any) => {
         this.messages = data.messages;
-        this.activeRAG = true;
+        this.activeRAG = true; // by default activate knowledge base
       });        
   }
 
   private lastChat() {
+    // is exist any conversatio load the last one
     if (!this.isNewConversartion) {
       this.getLastConversation();
     }

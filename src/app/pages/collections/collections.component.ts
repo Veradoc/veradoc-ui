@@ -36,7 +36,8 @@ export class CollectionsComponent implements OnInit {
   readonly ROOT_BUCKET = "custom-corpus";
 
   private fb = inject(FormBuilder);
-  router = inject(Router);
+  private router = inject(Router);
+  private confirmationService = inject(ConfirmationService);  
   collectionService = inject(CollectionService);
   brokerService = inject(BrokerService);
 
@@ -113,15 +114,26 @@ export class CollectionsComponent implements OnInit {
   }
 
   onRemoveCollection(collection: any) {
-    this.collectionService.deleteCollection(this.ROOT_BUCKET, collection.path).subscribe({
-      next: () => {
-        this.loadCollections();
-        this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Collection deleted', BrokerMessageCriticity.SUCCESS);
-      },
-      error: (err) => {
-        console.log(err);
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete ${collection.path} collection?`,
+      header: 'Confirm Deletion',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Delete',
+      rejectLabel: 'Cancel',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-secondary',
+      accept: () => {
+        this.collectionService.deleteCollection(this.ROOT_BUCKET, collection.path).subscribe({
+          next: () => {
+            this.loadCollections();
+            this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Collection deleted', BrokerMessageCriticity.SUCCESS);
+          },
+          error: (err) => {
+            console.log(err);
 
-        this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
+            this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
+          }
+        });        
       }
     });
   }
