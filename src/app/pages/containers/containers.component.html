@@ -31,10 +31,9 @@
           <td class="text-secondary">{{ container.attrs!.Created | date:'dd/MM/yyyy HH:mm' }}</td>
           <td>
             <span class="container-badge" [ngClass]="{
-                'running': container.status === 'running',
-                'exited': container.status === 'exited',
-                'warning': ['restarting', 'paused'].includes(container.status),
-                'danger': container.status === 'dead'
+                'container-running': container.status === 'running',
+                'container-exited': container.status === 'exited',
+                'container-paused': ['restarting', 'paused'].includes(container.status),
               }">
               {{ container.status | titlecase }}
             </span>

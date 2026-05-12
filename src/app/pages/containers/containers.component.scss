@@ -60,22 +60,22 @@
   font-weight: 500;
 }
 
-.role-container.running {
+.container-running {
   background: #f3f4f6;
   color: #10b981;
   border: 1px solid #e5e7eb;
 }
 
-.role-container.exited {
-  background: #fef2f2;
-  color: #d4a319;
-  border: 1px solid #fecaca;
+.container-exited {
+  background: #f3f4f6;
+  color: #991b1b;
+  border: 1px solid #e5e7eb;
 }
 
-.role-container.paused {
-  background: #fef2f2;
-  color: #991b1b;
-  border: 1px solid #fecaca;
+.container-paused {
+  background: #f3f4f6;
+  color: #d4a319;
+  border: 1px solid #e5e7eb;
 }
 
 .status-indicator {

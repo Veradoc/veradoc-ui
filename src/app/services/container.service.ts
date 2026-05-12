@@ -34,9 +34,8 @@ export class ContainerService {
      * Get list of containers, optionally filtered by stack
      */
     getContainers(stackName?: string): Observable<{ containers: any[] }> {
-        let params = new HttpParams();
-
         const headers: any = this.getAuthHeaders();
+        let params = new HttpParams();
         
         if (stackName) {
             params = params.set('stack_name', stackName);
@@ -54,7 +53,7 @@ export class ContainerService {
     startContainer(containerId: string): Observable<any> {
         const headers: any = this.getAuthHeaders();
         
-        return this.http.post(`${this.baseUrl}/${containerId}/start`, {
+        return this.http.post(`${this.baseUrl}/${containerId}/start`, null, {
             headers: headers,
         });
     }
@@ -65,7 +64,7 @@ export class ContainerService {
     stopContainer(containerId: string): Observable<any> {
         const headers: any = this.getAuthHeaders();
         
-        return this.http.post(`${this.baseUrl}/${containerId}/stop`, {
+        return this.http.post(`${this.baseUrl}/${containerId}/stop`, null, {
             headers: headers,
         });
     }

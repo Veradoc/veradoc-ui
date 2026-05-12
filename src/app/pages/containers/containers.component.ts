@@ -35,22 +35,16 @@ export class ContainersComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private brokerService = inject(BrokerService);
 
+  //readonly STACK = "veradoc-web";
+  readonly STACK = "uniovi-robotics-workshop-deployment";
+
   loading: boolean = true;
   containers: any[] = [];
   container: any = {};
 
-  statusStyles = {
-    running: { label: 'Running', class: 'status-running' },
-    exited: { label: 'Stopped', class:  'status-exited' },
-    restarting: { label: 'Restarting', class: 'status-warning' },
-    paused: { label: 'Paused', class: 'status-paused' },
-    dead: { label: 'Dead', class: 'status-danger' },
-    created: { label: 'Created', class: 'status-info' }
-  };
-
   private loadContainers() {
     this.loading = true;
-    this.containerService.getContainers()
+    this.containerService.getContainers(this.STACK)
       .subscribe({
         next: (data) => {
           this.containers = data.containers;
@@ -75,38 +69,64 @@ export class ContainersComponent implements OnInit {
   }
 
   openStart(container: any) {
-    this.containerService.startContainer(container.id)
-      .subscribe({
-        next: (result) => {
-          this.loading = false;          
+    this.confirmationService.confirm({
+      message: `Are you sure you want to start ${container.name}?`,
+      header: 'Confirm Start',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'start',
+      rejectLabel: 'Cancel',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-secondary',
+      accept: () => {
+        this.containerService.startContainer(container.id)
+          .subscribe({
+            next: (result) => {
+              this.loading = false;
 
-          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Container started correctly', BrokerMessageCriticity.SUCCESS);          
-        },
-        error: (err) => {
-          console.log(err);
+              this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Container started correctly', BrokerMessageCriticity.SUCCESS);
 
-          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
-          
-          this.loading = false;
-        },
-      });    
+              this.loadContainers();
+            },
+            error: (err) => {
+              console.log(err);
+
+              this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
+
+              this.loading = false;
+            },
+          });  
+      }
+    });  
   }
 
   openStop(container: any) {
-    this.containerService.stopContainer(container.id)
-      .subscribe({
-        next: (result) => {
-          this.loading = false;
+    this.confirmationService.confirm({
+      message: `Are you sure you want to stop ${container.name}?`,
+      header: 'Confirm Stop',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Stop',
+      rejectLabel: 'Cancel',
+      acceptButtonStyleClass: 'p-button-danger p-button-text',
+      rejectButtonStyleClass: 'p-button-text p-button-secondary',
+      accept: () => {
+        this.containerService.stopContainer(container.id)
+          .subscribe({
+            next: (result) => {
+              this.loading = false;
 
-          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Container stopped correctly', BrokerMessageCriticity.SUCCESS);
-        },
-        error: (err) => {
-          console.log(err);
+              this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Container stopped correctly', BrokerMessageCriticity.SUCCESS);
 
-          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
+              this.loadContainers();              
+            },
+            error: (err) => {
+              console.log(err);
 
-          this.loading = false;
-        },
-      });    
+              this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
+
+              this.loading = false;
+            },
+          }); 
+      }
+    });    
   }
 }
