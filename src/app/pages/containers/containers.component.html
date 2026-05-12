@@ -1,0 +1,58 @@
+<div class="users-container">
+  <header class="view-header">
+    <p-button icon="pi pi-refresh" label="Refresh"
+      [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}"
+      (onClick)="onRefresh()"/> 
+  </header>
+
+  <div class="table-card">
+    <p-table [value]="containers" responsiveLayout="scroll" [rowHover]="true" styleClass="p-datatable-clean">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Image</th>
+          <th>Ip</th>
+          <th>Ports</th>
+          <th>Health</th>
+          <th>Created At</th>
+          <th>Status</th>
+          <th class="text-right">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-container>
+        <tr>
+          <td class="font-medium">{{ container.id }}</td>
+          <td class="font-medium">{{ container.name }}</td>
+          <td class="font-medium">{{ container.image }}</td>
+          <td class="font-medium"></td>
+          <td class="font-medium"></td>
+          <td class="text-secondary">{{ container.health }}</td>
+          <td class="text-secondary">{{ container.attrs!.Created | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <span class="container-badge" [ngClass]="{
+                'running': container.status === 'running',
+                'exited': container.status === 'exited',
+                'warning': ['restarting', 'paused'].includes(container.status),
+                'danger': container.status === 'dead'
+              }">
+              {{ container.status | titlecase }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <div class="action-buttons-container">
+              <button class="icon-btn start" (click)="openStart(container)" title="Start container">
+                <i class="pi pi-play"></i>
+              </button>
+              <button class="icon-btn stop" (click)="openStop(container)" title="Stop container">
+                <i class="pi pi-stop"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <p-confirmDialog [style]="{ width: '450px' }" />
+  </div>
+</div>

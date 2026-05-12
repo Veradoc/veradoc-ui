@@ -76,8 +76,8 @@
           severity="secondary" 
           (onClick)="onNavigateTo('/users')" 
           [styleClass]="'w-full flex align-items-center border-none outline-none ' +
-                  (activeRoute === '/users' ? 'menu-item-active ' : ' ') +
-                  (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
+            (activeRoute === '/users' ? 'menu-item-active ' : ' ') +
+            (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
         </p-button>
       }
 
@@ -89,10 +89,23 @@
           severity="secondary" 
           (onClick)="onNavigateTo('/models')" 
           [styleClass]="'w-full flex align-items-center border-none outline-none ' +
-                  (activeRoute === '/models' ? 'menu-item-active ' : ' ') +
-                  (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
+            (activeRoute === '/models' ? 'menu-item-active ' : ' ') +
+            (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
         </p-button>
-      }      
+      }
+      
+      @if (authService.currentUser()?.is_superuser == true) {
+      <p-button 
+        icon="pi pi-box"
+        [label]="isExpanded() ? 'Containers' : ''" [text]="true"
+        [rounded]="true"
+        severity="secondary"
+        (onClick)="onNavigateTo('/containers')"
+        [styleClass]="'w-full flex align-items-center border-none outline-none ' +
+          (activeRoute === '/containers' ? 'menu-item-active ' : ' ') +
+          (isExpanded() ? 'justify-content-start gap-3 px-3' : 'justify-content-center px-0')">
+      </p-button>
+      }
     </nav>
 
     @if (isExpanded()) {

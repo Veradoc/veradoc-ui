@@ -8,6 +8,7 @@ import { CollectionsComponent } from './pages/collections/collections.component'
 import { FilesComponent } from './pages/files/files.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ModelsComponent } from './pages/models/models.component';
+import { ContainersComponent } from './pages/containers/containers.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { guestGuard } from './services/guest.guard';
 
@@ -26,6 +27,7 @@ export const routes: Routes = [
       { path: 'files/:collectionName', component: FilesComponent },
       { path: 'users', component: UsersComponent },
       { path: 'models', component: ModelsComponent },
+      { path: 'containers', component: ContainersComponent },
       { path: 'settings', component: SettingsComponent },
       { path: '', redirectTo: 'conversation', pathMatch: 'full' },      
     ]

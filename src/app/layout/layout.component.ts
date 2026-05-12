@@ -69,6 +69,7 @@ export class LayoutComponent implements OnInit {
     { path: '/files', rootPath: '/collections', title: 'Files', subtitle: 'Manage, Store, and Sync.' },    
     { path: '/users', title: 'Users', subtitle: 'Manage team members and their system permissions.' },
     { path: '/models', title: 'Models', subtitle: 'Manage your reasoning models.' },
+    { path: '/containers', title: 'Containers', subtitle: 'Manage your system.' },
   ];
   selecteHeaderTitle: any;
 
