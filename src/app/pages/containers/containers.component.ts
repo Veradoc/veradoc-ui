@@ -35,16 +35,13 @@ export class ContainersComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private brokerService = inject(BrokerService);
 
-  //readonly STACK = "veradoc-web";
-  readonly STACK = "uniovi-robotics-workshop-deployment";
-
   loading: boolean = true;
   containers: any[] = [];
   container: any = {};
 
   private loadContainers() {
     this.loading = true;
-    this.containerService.getContainers(this.STACK)
+    this.containerService.getContainers()
       .subscribe({
         next: (data) => {
           this.containers = data.containers;
