@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - 65px);
-  background-color: #f9f9f9;
+  background-color: var(--brand-light);
 }
 
 /* Chat History Area */
@@ -70,7 +70,7 @@ flex: 1;
 /* Floating Bottom Input */
 .input-container {
   position: fixed;
-  background-color: #f9f9f9;
+  background-color: var(--brand-light);
   bottom: 0;
   left: 260px;
   right: 0;
@@ -81,8 +81,8 @@ flex: 1;
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    #f9f9f9 20%, /* Text starts fading here */
-    #f9f9f9 100% /* Becomes fully solid behind the box */
+    var(--brand-light) 20%, /* Text starts fading here */
+    var(--brand-light) 100% /* Becomes fully solid behind the box */
   );
   
   /* Pointer-events: none allows you to click "through" the transparent 
@@ -162,7 +162,7 @@ flex: 1;
 }
 
 /* Make the stop icon look distinct */
-:host ::ng-deep .p-button.p-button-danger {
+::ng-deep .p-button.p-button-danger {
     color: #ef4444 !important;
 }
 
@@ -207,8 +207,8 @@ flex: 1;
 }
 
 .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
-  background-color: #000000 !important;
-  border-color: #000000 !important;
+  background-color: var(--brand-dark) !important;
+  border-color: var(--brand-dark) !important;
 }
 
 // Style Markdonw code
@@ -259,12 +259,12 @@ flex: 1;
 
 /* Change background to black when switch is ON */
 ::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
-    background: #1a1a1a !important;
+    background: var(--brand-dark) !important;
 }
 
 /* Optional: Change the border color when ON to match the black theme */
 ::ng-deep .p-toggleswitch.p-toggleswitch-checked:not(.p-disabled):hover .p-toggleswitch-slider {
-    background: #000000 !important;
+    background: var(--brand-dark) !important;
 }
 
 /* Optional: If you want to change the focus ring color to a subtle gray instead of green/blue */

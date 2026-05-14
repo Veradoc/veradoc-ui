@@ -1,6 +1,6 @@
 /* Layout & Background */
 .layout-wrapper {
-  background-color: #f9f8f6; /* Soft off-white */
+  background-color: var(--brand-light);
   height: calc(100vh - 65px);
   display: flex;
   flex-direction: column;
@@ -41,14 +41,14 @@
 .greeting-container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center;  
   gap: 12px;
   margin-bottom: 3rem;
 }
 
 .sparkle {
   display: inline-block; /* Essential: transforms like rotate don't work on inline elements */  
-  color: #d97706; /* Muted orange/amber */
+  color: var(--brand-dark);
   font-size: 2.5rem;
 
   /* Animation properties */
@@ -205,4 +205,19 @@
 
 .text-blue .icon-sm {
   color: #3b82f6;
+}
+
+/* Change background to black when switch is ON */
+::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
+  background: var(--brand-dark) !important;
+}
+
+/* Optional: Change the border color when ON to match the black theme */
+::ng-deep .p-toggleswitch.p-toggleswitch-checked:not(.p-disabled):hover .p-toggleswitch-slider {
+  background: var(--brand-dark) !important;
+}
+
+/* Optional: If you want to change the focus ring color to a subtle gray instead of green/blue */
+::ng-deep .p-toggleswitch.p-focus .p-toggleswitch-slider {
+  box-shadow: 0 0 0 0.2rem rgba(150, 150, 150, 0.5) !important;
 }

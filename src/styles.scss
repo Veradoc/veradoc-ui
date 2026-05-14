@@ -1,4 +1,4 @@
-/* Import PrimeIcons */
+/* Import PrimeIcons and primeflex */
 @import "primeicons/primeicons.css";
 @import 'primeflex/primeflex.css';
 
@@ -6,20 +6,26 @@
 ::-webkit-scrollbar {
   width: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #e5e7eb;
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #d1d5db;
 }
 
+/* VeraDoc Default colors and font family Styling */
 :root {
-  --font-family: "Inter", sans-serif;
+  --brand-font-family: "Inter", sans-serif;
+  --brand-light: #f4F9ff;
+  --brand-dark: #0f1f3d;
+  --brand-hover: lighten(#0f1f3d, 10%);
 }
 
 body {
   margin: 0;
-  background-color: #f9f9f9; 
-  font-family: var(--font-family); /* Use PrimeNG's font variable */
+  background-color: var(--brand-light);;
+  font-family: var(--brand-font-family);
 }

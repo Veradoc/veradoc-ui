@@ -2,18 +2,23 @@
   padding: 1rem;
   height: calc(100vh - 65px);
   margin: 0 auto;
-  background-color: #f9f9f9;  
+  background-color: var(--brand-light);  
 }
 
 /* Ensure the p-card body doesn't add extra padding that breaks alignment */
-:host ::ng-deep .model-card .p-card-header {
+::ng-deep .model-card {
+  background-color: var(--brand-dark) !important;
+}
+
+::ng-deep .model-card .p-card-header {
     width: 530px;
-    background-color: #000000 !important;        
+    background-color: var(--brand-dark) !important;   
+         
     border-radius: 10px;
 }
 
-:host ::ng-deep .p-card-body {
-    background-color: #000000 !important;
+::ng-deep .p-card-body {
+    background-color: var(--brand-dark) !important;
     border-radius: 10px;
 }
 
@@ -36,7 +41,7 @@
 
 ::ng-deep .active-dark-btn {
     //background: #1a1a1a !important; /* Deep black */
-    background: #000000 !important;
+    background: var(--brand-dark) !important;
     color: #ffffff !important;      /* White text */
     border: 1px solid #333 !important;
     border-radius: 8px !important;
@@ -52,7 +57,7 @@
 
 /* Target the header (Available Model Types) */
 ::ng-deep .p-select-option.p-select-option-selected {
-  background-color: #000000 !important;
+  background-color: var(--brand-dark) !important;
   color: #ffffff !important;
 }
 

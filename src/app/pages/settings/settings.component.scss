@@ -1,7 +1,7 @@
 .settings-container {
   display: flex;
   height: calc(100vh - 65px);
-  background-color: #f9f9f9;
+  background-color: var(--brand-light);
   font-family: "Inter", sans-serif;
 }
 
@@ -153,7 +153,7 @@ input[pInputText], textarea[pInputTextarea] {
 }
 
 .btn-danger {
-  background: #0a0a0a; /* Based on the image's dark button */
+  background: var(--brand-dark);
   color: white;
   border: none;
 }
@@ -168,4 +168,19 @@ input[pInputText], textarea[pInputTextarea] {
   gap: 10px;
   font-size: 0.85rem;
   color: #666;
+}
+
+/* Change background to black when switch is ON */
+::ng-deep .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
+  background: var(--brand-dark) !important;
+}
+
+/* Optional: Change the border color when ON to match the black theme */
+::ng-deep .p-toggleswitch.p-toggleswitch-checked:not(.p-disabled):hover .p-toggleswitch-slider {
+  background: var(--brand-dark) !important;
+}
+
+/* Optional: If you want to change the focus ring color to a subtle gray instead of green/blue */
+::ng-deep .p-toggleswitch.p-focus .p-toggleswitch-slider {
+  box-shadow: 0 0 0 0.2rem rgba(150, 150, 150, 0.5) !important;
 }

@@ -6,7 +6,8 @@
   justify-content: center;
 
   /* 1. Base background color */
-  background-color: #fdfcf7; 
+  //background-color: var(--brand-light);
+  background-color: var(--brand-light);
 
   /* 2. The Dotted Grid */
   /* radial-gradient(color size, transparent) */

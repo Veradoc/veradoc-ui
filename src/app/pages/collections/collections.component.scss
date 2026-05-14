@@ -2,7 +2,7 @@
   padding: 1rem;
   height: calc(100vh - 65px);
   margin: 0 auto;
-  background-color: #f9f9f9;
+  background-color: var(--brand-light);
 }
 
 .view-header {
@@ -14,7 +14,7 @@
 
 :host ::ng-deep {
   .collection-card-header {
-      background-color: #000000 !important;
+      background-color: var(--brand-dark) !important;
       color: #ffffff;
   }
 
@@ -59,20 +59,20 @@
 }
 
 ::ng-deep .collection-dialog .p-inputtext:focus {
-  border-color: #1a1a1a !important;
+  border-color: var(--brand-dark) !important;
   box-shadow: 0 0 0 2px rgba(26, 26, 26, 0.05) !important;
 }
 
 /* Card component styles */
 ::ng-deep .claude-btn-primary .p-button {
-  background: #1a1a1a !important;
+  background: var(--brand-dark) !important;
   border: none !important;
   padding: 0.6rem 1.2rem;
   font-weight: 500;
 }
 
 ::ng-deep .collection-card-header {
-  background-color: #f9f9f9 !important;
+  background-color: var(--brand-light);
 }
 
 ::ng-deep .collection-remove .p-button-icon {
@@ -80,8 +80,8 @@
 }
 
 ::ng-deep .collection-remove .p-button:enabled:hover {
-  background-color: #000000 !important;
-  color: #000000 !important;
+  background-color: var(--brand-dark) !important;
+  color: var(--brand-dark) !important;
 }
 
 /* Modal Footer Styling */

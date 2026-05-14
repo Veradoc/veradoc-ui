@@ -113,7 +113,7 @@ export class LayoutComponent implements OnInit {
       label: 'Get help',
       icon: 'pi pi-question-circle',
       command: () => {
-          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, "Our help will be available soon. Please be patient.", BrokerMessageCriticity.WARNING);
+        window.open('https://veradoc.ai/help.html', '_blank');
     }       
 
     },
@@ -275,7 +275,8 @@ export class LayoutComponent implements OnInit {
     }
 
   onHelp() {
-    this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, "Our help will be available soon. Please be patient.", BrokerMessageCriticity.WARNING);
+    window.open('https://veradoc.ai/help.html', '_blank');
+    //this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, "Our help will be available soon. Please be patient.", BrokerMessageCriticity.WARNING);
   } 
   
   onGoHome() {

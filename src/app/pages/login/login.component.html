@@ -43,6 +43,7 @@
 
         <p-button 
           styleClass="w-full p-button-lg mt-2"        
+          [style]="{'background': 'var(--brand-dark)', 'border': '1px solid var(--brand-dark)'}"
           label="Sign in"           
           [loading]="loading"
           (onClick)="onLogin()">
@@ -55,8 +56,10 @@
     </div>
 
     <div class="waitlist-footer">
-      <span>Want early access?</span>
-      <a href="#" class="waitlist-link">Join waitlist</a>
+      <span>Get some help?</span>
+      <a href="https://veradoc.ai/help.html" 
+        target="_blank"
+        class="waitlist-link">Help Center</a>
     </div>       
   </div>
 </div>

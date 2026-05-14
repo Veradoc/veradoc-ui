@@ -67,13 +67,13 @@ export class ModelsComponent implements OnInit {
   totalModels: number = 0;
   searchQuery: string = '';
   sortModel: string = 'likes'; // default filter model
-  filterModel: any = {"key": "image-text-to-text", text: "Image/Text to Text Generation"}; // default filter model
   filterModels: any[] = [
     {"key": "text-generation", text: "Text Generation"},
-    {"key": "image-text-to-text", text: "Image/Text to Text Generation"},
-    {"key": "feature-extraction", text: "Features Extraction" },
-    {"key": "sentence-similarity", text: "Sentence Similarity" }
+    //{"key": "image-text-to-text", text: "Image/Text to Text Generation"},
+    { "key": "sentence-similarity", text: "Sentence Similarity" },
+    //{"key": "feature-extraction", text: "Features Extraction" }
   ];
+  filterModel: any = this.filterModels[0];
   showTerminal: boolean = false;
 
   hasMorePages: boolean = true;

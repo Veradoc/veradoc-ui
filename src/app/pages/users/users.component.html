@@ -1,7 +1,7 @@
 <div class="users-container">
   <header class="view-header">
     <p-button icon="pi pi-plus" label="New User"
-      [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}"
+      [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}"
       (onClick)="openDialog()"/> 
   </header>
 
@@ -119,7 +119,7 @@
       <ng-template pTemplate="footer">
         <div class="dialog-footer">
           <p-button label="Cancel" icon="pi pi-times" [text]="true" severity="secondary" (onClick)="onHideDialog()" />
-          <p-button label="Save User" icon="pi pi-check" [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}" (onClick)="onSaveUser()" [disabled]="userForm.invalid"/>
+          <p-button label="Save User" icon="pi pi-check" [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}" (onClick)="onSaveUser()" [disabled]="userForm.invalid"/>
         </div>
       </ng-template>
     </p-dialog>

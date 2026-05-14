@@ -4,7 +4,7 @@
     padding: 24px;
     height: calc(100vh - 65px);
     font-family: 'Inter', -apple-system, sans-serif;
-    background-color: #f9f9f9;
+    background-color: var(--brand-light);
 }
 
 .title-group {
@@ -159,7 +159,7 @@
 /* Right Detail Panel - Clean and integrated */
 .info-panel {
     width: 400px;
-    background-color: #f9f9f9;
+    background-color: var(--brand-light);
     padding: 32px 24px;
     overflow-y: auto;
     border: 1px solid #e5e7eb;
@@ -246,7 +246,7 @@
 
 /* Table Customization */
 ::ng-deep .p-datatable-clean .p-datatable-thead>tr>th {
-  background: #f9f9f9;
+  background: var(--brand-light);
   color: #666;
   font-weight: 500;
   font-size: 0.85rem;

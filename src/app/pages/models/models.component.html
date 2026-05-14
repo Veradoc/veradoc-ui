@@ -55,9 +55,9 @@
                 label="Sort: Created at" severity="secondary" size="small" (onClick)="onOrderModels('createdAt')">
             </p-button> 
             <p-button icon="pi pi-chevron-left" aria-label="Previous" (onClick)="onPaginatedPrev()" [disabled]="page === 1" size="small"
-                [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}"/>
+                [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}"/>
             <p-button icon="pi pi-chevron-right" aria-label="Next" (onClick)="onPaginatedNext()" [disabled]="!hasMorePages" size="small"
-                [style]="{'background-color': '#1a1a1a', 'color': '#ffffff', 'border': 'none'}" />  
+                [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}" />  
         </div>
     </header>
 
