@@ -17,6 +17,8 @@ import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from '../../
 import { AuthService } from '../../services/auth.service';
 import { OllamaService } from '../../services/ollama.service';
 
+import { VdAvatarComponent } from '../../components/vd-avatar/vd-avatar.component';
+
 @Component({
   selector: 'app-chats',
   imports: [
@@ -25,7 +27,8 @@ import { OllamaService } from '../../services/ollama.service';
     ClipboardModule,
     ButtonModule,
     ToggleSwitchModule,
-    MarkdownComponent
+    MarkdownComponent,
+    VdAvatarComponent,
   ],
   providers: [
     MessageService,

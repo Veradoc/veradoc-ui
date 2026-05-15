@@ -12,11 +12,13 @@
             @if (msg.role === 'assistant') {
                 <div class="message-row ai">
                     <div class="ai-avatar">
-                        @if (isThinking && $last) {
+                        <vd-avatar [thinking]="isThinking && $last" size="sm" />
+
+                        <!--@if (isThinking && $last) {
                             <i class="pi pi-spin pi-spinner sparkle-icon"></i>
                         } @else {
                             <span class="sparkle">✴</span>
-                        }
+                        }-->
                     </div>
                     <div class="message-content">
                         <markdown [data]="msg.content"></markdown>
