@@ -82,6 +82,19 @@
       </section>
     }
 
+    @if (selectedSection === 'model') {
+    <section>
+      <h3>Model Configurations</h3>
+      <div class="settings-list">
+        <div class="settings-item">
+          <span>Embedding Top Vectors</span>
+          <p-inputnumber placeholder="Set Top Vectors" [(ngModel)]="topVectors" 
+          (ngModelChange)="onTopVectorsChange($event)"/>    
+        </div>
+      </div>
+    </section>
+    }
+
     <p-confirmDialog [style]="{ width: '450px' }" />
   </main>
 </div>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { RippleModule } from 'primeng/ripple';
@@ -13,6 +14,7 @@ import { ConfirmationService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from '../../services/broker.service';
+import { SettingService } from '../../services/setting.service';
 
 @Component({
   selector: 'app-find',
@@ -20,6 +22,7 @@ import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from '../../
     CommonModule,
     FormsModule,
     InputTextModule,
+    InputNumberModule,
     SelectModule,
     ToggleSwitchModule,
     RippleModule,    
@@ -32,19 +35,23 @@ import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from '../../
   styleUrl: './settings.component.scss'
 })
 export class SettingsComponent implements OnInit {
+  readonly TOP_VECTORS_KEY = "TOP_VECTORS"
   private brokerService = inject(BrokerService);
   private confirmationService = inject(ConfirmationService); 
   private userService = inject(UserService);  
+  private settingService = inject(SettingService);
   authService = inject(AuthService);  
 
   selectedSection = 'general';
   selectedJob = ''
   notificationsEnabled = true;
   name = '';
+  topVectors = 5
 
   menuItems = [
     { id: 'general', label: 'General' },
-    { id: 'account', label: 'Account' }
+    { id: 'account', label: 'Account' },
+    { id: 'model', label: 'Model' }
   ];
 
   jobs = [
@@ -55,6 +62,20 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit() {
     this.name = this.authService.currentUser()?.name ?? '';
+
+    this.settingService.getValueByKey(this.TOP_VECTORS_KEY)
+      .subscribe({
+        next: (result: any) => {
+          if (result) {
+            this.topVectors = Number(result.value);
+          }
+        },
+        error: (err) => {
+          console.log(err);
+
+          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
+        }
+      });    
   }
 
   onDeleteAccount() {
@@ -83,6 +104,22 @@ export class SettingsComponent implements OnInit {
       }
     });        
   } 
+
+  onTopVectorsChange(event: any) {
+    if (!this.topVectors) return;    
+
+    this.settingService.saveKey(this.TOP_VECTORS_KEY, this.topVectors.toString())
+      .subscribe({
+        next: () => {
+          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Top Vectors model setted successfully', BrokerMessageCriticity.SUCCESS);
+        },
+        error: (err) => {
+          console.log(err);
+
+          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
+        }
+      });
+  }
 
   onLogout() {
     this.authService.logout();
