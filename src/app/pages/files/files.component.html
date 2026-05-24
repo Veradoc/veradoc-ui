@@ -4,7 +4,7 @@
             <p-button icon="pi pi-refresh" size="small" label="Refresh"
                 [style]="{'background-color': '#ffffff', 'color': '#1a1a1a', 'border': '1px solid #e5e7eb'}"
                 (onClick)="loadFiles()"/>   
-            <!-- The Upload Menu -->                
+            <!-- The Upload Menu -->
             <p-button 
                 label="Upload" 
                 [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}"
@@ -12,21 +12,22 @@
                 icon="pi pi-upload" 
                 iconPos="right"
                 (click)="menu.toggle($event)">
-            </p-button>            
+            </p-button>
+
             <p-menu #menu [model]="uploadTypes" [popup]="true" [style]="{'font-size': '0.875rem', 'width': '200px'}">></p-menu>
 
-            <input 
+            <!--<input 
                 #fileInput 
                 type="file"
                 style="display: none" 
-                (change)="onFileSelected($event)"/>                
-            <input 
+                (change)="onFileSelected($event)"/>-->                
+            <!--<input 
                 #folderInput 
                 type="file" 
                 webkitdirectory 
                 directory
                 style="display: none" 
-                (change)="onFolderSelected($event)"/>                
+                (change)="onFolderSelected($event)"/>-->               
         </div>
     </div>
 
@@ -94,6 +95,113 @@
             </div>
         </aside>
     </div>
+
+    <!-- File Dialog-->    
+    <p-dialog 
+        [(visible)]="visibleFileDialog" 
+        [modal]="true" 
+        [draggable]="false" 
+        [resizable]="false"
+        styleClass="veradoc-dialog"
+        header="Add Files">    
+        <div class="dialog-content">
+            <div class="form-group">
+                <label class="input-label">Select Files *</label>
+                <label class="file-selector-input">
+                    <input
+                        #fileInput
+                        type="file"
+                        multiple
+                        name="file[]"
+                        accept="*/*"
+                        (change)="onFilesSelected($event)"
+                        style="position: absolute; opacity: 0; width: 1px; height: 1px;" />
+                        <span class="file-count-text">
+                            {{ selectedFilesCount > 0 ? selectedFilesCount + ' file(s) selected' : 'Select files...' }}
+                        </span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="input-label">Tags</label>
+                <div class="tags-flex-wrapper">
+                    <p-autocomplete
+                        [(ngModel)]="tags"
+                        [multiple]="true"
+                        [suggestions]="suggestions"
+                        [showEmptyMessage]="false"
+                        (completeMethod)="onComplete($event)"
+                        (onKeyUp)="onAddTag($event)"
+                        placeholder="Add a tag..."
+                        styleClass="veradoc-autocomplete"                       
+                    />
+                </div>
+            </div>
+
+            <div class="dialog-footer">
+                <button pButton class="p-button-text cancel-btn" (click)="onCancelFiles()">
+                    <i class="pi pi-times mr-2"></i> Cancel
+                </button>
+                <button pButton class="save-user-btn" (click)="onSaveFiles()">
+                    <i class="pi pi-check mr-2"></i> Save Files
+                </button>
+            </div>
+        </div>
+    </p-dialog>
+
+    <!-- Folder Dialog-->    
+    <p-dialog 
+        [(visible)]="visibleFolderDialog" 
+        [modal]="true" 
+        [draggable]="false" 
+        [resizable]="false"
+        styleClass="veradoc-dialog"
+        header="Add Files">    
+        <div class="dialog-content">
+            <div class="form-group">
+                <label class="input-label">Select Folder *</label>
+                <label class="file-selector-input">
+                <input 
+                    #folderInput 
+                    type="file" 
+                    multiple
+                    name="folder"
+                    webkitdirectory 
+                    directory
+                    style="display: none" 
+                    (change)="onFilesSelected($event)"/>      
+                    <span class="file-count-text">
+                        {{ selectedFilesCount > 0 ? selectedFilesCount + ' files selected' : 'Select folder...' }}
+                    </span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="input-label">Tags</label>
+                <div class="tags-flex-wrapper">
+                    <p-autocomplete
+                        [(ngModel)]="tags"
+                        [multiple]="true"
+                        [suggestions]="suggestions"
+                        [showEmptyMessage]="false"
+                        (completeMethod)="onComplete($event)"
+                        (onKeyUp)="onAddTag($event)"
+                        placeholder="Add a tag..."
+                        styleClass="veradoc-autocomplete"                       
+                    />
+                </div>
+            </div>
+
+            <div class="dialog-footer">
+                <button pButton class="p-button-text cancel-btn" (click)="onCancelFiles()">
+                    <i class="pi pi-times mr-2"></i> Cancel
+                </button>
+                <button pButton class="save-user-btn" (click)="onSaveFiles()">
+                    <i class="pi pi-check mr-2"></i> Save Files
+                </button>
+            </div>
+        </div>
+    </p-dialog>
 
     <p-confirmDialog [style]="{ width: '450px' }" />    
 </div>

@@ -262,3 +262,209 @@
   color: #333;
   font-size: 0.95rem;
 }
+
+/* primeng file upload styles*/ 
+/* Deep dark theme modifications for PrimeNG Dialog container */
+/* --- Global Overrides for Light Dialog --- */
+::ng-deep .veradoc-dialog .p-dialog {
+  background: #ffffff !important;
+  color: #2c3e50 !important;
+  border-radius: 16px !important;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+  width: 480px !important;
+  min-width: 480px !important;
+  max-width: 480px !important;  
+}
+
+::ng-deep .veradoc-dialog .p-dialog-header {
+  border-radius: inherit;
+  background: #ffffff !important;
+  color: #34495e !important;
+  border-bottom: none !important;
+  padding: 2rem 2rem 1rem 2rem !important;
+}
+
+::ng-deep .veradoc-dialog .p-dialog-header .p-dialog-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+::ng-deep .veradoc-dialog .p-dialog-header .p-dialog-header-icon {
+  color: #7f8c8d !important;
+  transition: color 0.2s;
+}
+
+::ng-deep .veradoc-dialog .p-dialog-header .p-dialog-header-icon:hover {
+  color: #2c3e50 !important;
+  background: #f8f9fa;
+}
+
+::ng-deep .veradoc-dialog .p-dialog-content {
+  background: #ffffff !important;
+  padding: 0 2rem 2rem 2rem !important;
+  border-radius: inherit;
+}
+
+/* --- Form Fields --- */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.input-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+/* Simulated File Input matching "Full Name" border box look */
+.file-selector-input {
+  border: 1.5px solid #2c3e50; /* Bold dark outline option */
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  background-color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.file-count-text {
+  color: #2c3e50;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* --- Soft Blue Light Container Box (Matches Status Strip) --- */
+.tags-status-container {
+  background-color: #f8fbfd; /* Very soft brand background color */
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tags-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7f8c8d;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.tags-flex-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* --- Light Theme p-chip Adjustments --- */
+::ng-deep .tags-flex-wrapper .p-chip {
+  background: var(--brand-dark)  !important;
+  border: 1px solid #ced4da !important;
+  color: var(--brand-light) !important;
+  padding: 0.2rem 0.6rem !important;
+  border-radius: 6px !important;
+}
+
+::ng-deep .tags-flex-wrapper .p-chip .p-chip-icon {
+  color: var(--brand-light) !important;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+::ng-deep .p-chip-remove-icon {
+    color: var(--brand-light) !important;
+}
+
+/* --- Footer Action Buttons --- */
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+  border-top: 1px solid #f1f2f6;
+  padding-top: 1.5rem;
+}
+
+/* Cancel Text Button */
+::ng-deep .cancel-btn {
+  background: transparent !important;
+  border: none !important;
+  color: #7f8c8d !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  box-shadow: none !important;
+}
+
+::ng-deep .cancel-btn:hover {
+  color: #2c3e50 !important;
+}
+
+/* Navy Solid Save Button */
+::ng-deep .save-user-btn {
+  background-color: var(--brand-dark) !important; /* Authentic Dark Navy from screenshot */
+  border: none !important;
+  color: var(--brand-light)!important;
+  border-radius: 8px !important;
+  padding: 0.7rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  box-shadow: 0 4px 10px rgba(11, 26, 48, 0.15);
+}
+
+::ng-deep .save-user-btn:hover {
+  background-color: var(--brand-dark) !important;
+}
+
+/* 1. Strictly clamp the dialog width */
+::ng-deep .veradoc-dialog .p-dialog {
+  width: 480px !important;
+  max-width: 480px !important;
+  min-width: 480px !important;
+}
+
+/* 2. Break PrimeNG's inline JS width calculations */
+::ng-deep .veradoc-autocomplete {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+}
+
+::ng-deep .veradoc-autocomplete .p-autocomplete {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* 3. Force the internal token wrapper list to wrap and obey boundaries */
+::ng-deep .veradoc-autocomplete .p-autocomplete-multiple-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  overflow: hidden !important; /* Prevents text from pushing boundaries out */
+  gap: 0.35rem !important;
+}
+
+/* 4. Tame individual chip tokens so they don't block wrapping */
+::ng-deep .veradoc-autocomplete .p-autocomplete-multiple-container .p-autocomplete-token {
+  max-width: calc(100% - 20px) !important; /* Prevents a long single tag from blowing out the width */
+}
+
+/* 5. Force the typing zone container to collapse dynamically */
+::ng-deep .veradoc-autocomplete .p-autocomplete-multiple-container .p-autocomplete-input-token {
+  flex: 1 1 50px !important;
+  min-width: 50px !important;
+  max-width: 100% !important;
+  display: inline-flex !important;
+}
+
+/* 6. Force the actual native input field to obey the 100% block */
+::ng-deep .veradoc-autocomplete .p-autocomplete-multiple-container .p-autocomplete-input-token input {
+  width: 100% !important;
+  min-width: 30px !important;
+}
