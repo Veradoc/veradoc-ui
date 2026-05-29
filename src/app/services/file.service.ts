@@ -59,11 +59,12 @@ export class FileService {
     });
   }
 
-  uploadFiles(bucketName: string, path: string, files: File[] | FileList): Observable<ApiResponse> {
+  uploadFiles(bucketName: string, path: string, files: File[] | FileList, tags?: any): Observable<ApiResponse> {
     const headers = this.getAuthHeaders();
     const params = new HttpParams()
       .set('bucket_name', bucketName)
-      .set('path', path);
+      .set('path', path)
+      .set('tags', tags);    
     
     const formData = new FormData();
 

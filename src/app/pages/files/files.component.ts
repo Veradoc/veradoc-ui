@@ -272,7 +272,7 @@ export class FilesComponent implements OnInit {
         console.log(this.selectedFiles);
 
         if (this.selectedFiles && this.selectedFiles.length > 0) {
-            this.fileService.uploadFiles(this.ROOT_BUCKET, this.collectionName, this.selectedFiles)
+            this.fileService.uploadFiles(this.ROOT_BUCKET, this.collectionName, this.selectedFiles, this.tags)
                 .pipe(
                     finalize(() => {
                         this.selectedFiles = [];

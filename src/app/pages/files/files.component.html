@@ -14,20 +14,7 @@
                 (click)="menu.toggle($event)">
             </p-button>
 
-            <p-menu #menu [model]="uploadTypes" [popup]="true" [style]="{'font-size': '0.875rem', 'width': '200px'}">></p-menu>
-
-            <!--<input 
-                #fileInput 
-                type="file"
-                style="display: none" 
-                (change)="onFileSelected($event)"/>-->                
-            <!--<input 
-                #folderInput 
-                type="file" 
-                webkitdirectory 
-                directory
-                style="display: none" 
-                (change)="onFolderSelected($event)"/>-->               
+            <p-menu #menu [model]="uploadTypes" [popup]="true" [style]="{'font-size': '0.875rem', 'width': '200px'}">></p-menu>           
         </div>
     </div>
 
@@ -103,7 +90,7 @@
         [draggable]="false" 
         [resizable]="false"
         styleClass="veradoc-dialog"
-        header="Add Files">    
+        header="Upload Files">    
         <div class="dialog-content">
             <div class="form-group">
                 <label class="input-label">Select Files *</label>
@@ -117,7 +104,7 @@
                         (change)="onFilesSelected($event)"
                         style="position: absolute; opacity: 0; width: 1px; height: 1px;" />
                         <span class="file-count-text">
-                            {{ selectedFilesCount > 0 ? selectedFilesCount + ' file(s) selected' : 'Select files...' }}
+                            {{ selectedFilesCount > 0 ? selectedFilesCount + ' file(s) selected' : 'Files selected ...' }}
                         </span>
                 </label>
             </div>
@@ -156,7 +143,7 @@
         [draggable]="false" 
         [resizable]="false"
         styleClass="veradoc-dialog"
-        header="Add Files">    
+        header="Upload Folder">    
         <div class="dialog-content">
             <div class="form-group">
                 <label class="input-label">Select Folder *</label>
@@ -171,7 +158,7 @@
                     style="display: none" 
                     (change)="onFilesSelected($event)"/>      
                     <span class="file-count-text">
-                        {{ selectedFilesCount > 0 ? selectedFilesCount + ' files selected' : 'Select folder...' }}
+                        {{ selectedFilesCount > 0 ? selectedFilesCount + ' files selected' : 'Folder selected ...' }}
                     </span>
                 </label>
             </div>
@@ -197,7 +184,7 @@
                     <i class="pi pi-times mr-2"></i> Cancel
                 </button>
                 <button pButton class="save-user-btn" (click)="onSaveFiles()">
-                    <i class="pi pi-check mr-2"></i> Save Files
+                    <i class="pi pi-check mr-2"></i> Save Folder
                 </button>
             </div>
         </div>
