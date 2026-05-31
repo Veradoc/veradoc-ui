@@ -27,6 +27,7 @@
                             <p-tableHeaderCheckbox (click)="onCheckboxClick(null)"></p-tableHeaderCheckbox>
                         </th>
                         <th>NAME</th>
+                        <th>TAGS</th>
                         <th>LAST MODIFIED</th>
                         <th>SIZE</th>
                         <th style="width: 8rem; text-align: center;">ACTIONS</th>
@@ -42,6 +43,9 @@
                         <td class="file-name-cell">
                             <i [class]="getFileIcon(file.name)" class="file-icon"></i>
                             <span>{{ file.name }}</span>
+                        </td>
+                        <td>
+                            <span class="size-badge">{{ file.tags }}</span>
                         </td>
                         <td class="text-muted">{{ convertToDate(file.last_modified) | date:'medium' }}</td>
                         <td>
