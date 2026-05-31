@@ -1,11 +1,11 @@
-.users-container {
+.users-wrapper {
   padding: 1rem;
   height: calc(100vh - 65px);
   margin: 0 auto;
   background-color: var(--brand-light)
 }
 
-.view-header {
+.header-section {
   display: flex;
   justify-content: right;
   align-items: center;
@@ -13,7 +13,7 @@
 }
 
 /* The Card */
-.table-card {
+.content-layout {
   border: 1px solid #e5e5e5;
   border-radius: 12px;
   overflow: hidden;

@@ -50,8 +50,8 @@ export class SettingsComponent implements OnInit {
 
   menuItems = [
     { id: 'general', label: 'General' },
-    { id: 'account', label: 'Account' },
-    { id: 'model', label: 'Model' }
+    { id: 'model', label: 'Model' },
+    { id: 'account', label: 'Account' }    
   ];
 
   jobs = [

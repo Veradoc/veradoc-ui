@@ -34,11 +34,13 @@ export class FileService {
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
-  getFiles(bucketName: string, path: string): Observable<CollectionStats[]> {
+  getFiles(bucketName: string, path?: string): Observable<CollectionStats[]> {
     const headers: any = this.getAuthHeaders();
-    const params = new HttpParams()
-      .set('bucket_name', bucketName)
-      .set('path', path);
+    let params = new HttpParams().set('bucket_name', bucketName);
+
+    if (path) {
+      params = params.set('path', path);
+    }
 
     return this.http.get<CollectionStats[]>(`${this.baseUrl}`, {
       headers: headers,

@@ -72,12 +72,12 @@ export class ChatService {
         return this.http.get<any[]>(`${this.baseUrl}/history/conversations/latest/messages`, { headers });
     } 
     
-    async streamChat(conversationId: string, question: string, history: any[], activeRAG: boolean, onChunk: (data: any) => void, signal?: AbortSignal) {
+    async streamChat(conversationId: string, question: string, tags: string, history: any[], activeRAG: boolean, onChunk: (data: any) => void, signal?: AbortSignal) {
         const headers: any = this.getAuthHeaders();
         const response = await fetch(`${this.baseUrl}/promt`, {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify({ conversationId, question, history, activeRAG }),
+            body: JSON.stringify({ conversationId, question, history, activeRAG, tags }),
             signal: signal, // Pass the signal here!
         });
 

@@ -468,3 +468,9 @@
   width: 100% !important;
   min-width: 30px !important;
 }
+
+.file-tags-cell {
+  display: flex;
+  flex-wrap: wrap; /* Allows tags to wrap to the next line if there are too many */
+  gap: 4px;        /* Adjust this value (e.g., 4px, 6px, 0.5rem) to your liking */
+}

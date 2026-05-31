@@ -1,11 +1,11 @@
-<div class="users-container">
-  <header class="view-header">
+<div class="users-wrapper">
+  <header class="header-section">
     <p-button icon="pi pi-plus" label="New User"
       [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}"
       (onClick)="openDialog()"/> 
   </header>
 
-  <div class="table-card">
+  <div class="content-layout">
     <p-table [value]="users" responsiveLayout="scroll" [rowHover]="true" styleClass="p-datatable-clean">
       <ng-template pTemplate="header">
         <tr>

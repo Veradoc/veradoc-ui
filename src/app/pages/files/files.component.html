@@ -44,13 +44,19 @@
                             <i [class]="getFileIcon(file.name)" class="file-icon"></i>
                             <span>{{ file.name }}</span>
                         </td>
-                        <td>
-                            <span class="size-badge">{{ file.tags }}</span>
+                        
+                        <td class="file-tags-cell">
+                            @for (tag of file.tags; track $index) {
+                                <span class="size-badge">{{ tag.trim() }}</span>
+                            }
                         </td>
+
                         <td class="text-muted">{{ convertToDate(file.last_modified) | date:'medium' }}</td>
+
                         <td>
                             <span class="size-badge">{{ formatSize(file.size_bytes)}}</span>
                         </td>
+
                         <td class="text-center">
                             <div class="action-icons">
                                 <i class="pi pi-trash" (click)="onDeleteFile(file); $event.stopPropagation()"></i>

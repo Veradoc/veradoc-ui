@@ -33,9 +33,41 @@
 /* Greeting */
 .main-content {
   width: 100%;
-  max-width: 800px;
+  max-width: 880px;
   padding: 0 20px;
   text-align: center;
+}
+
+.input-filter-tags {
+  max-width: 880px;      /* Adjust this to match the width of your chat bubbles */
+  margin: 0 auto;        /* This centers the block horizontally */
+  width: 100%;           /* Ensures it takes up the space until the max-width */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: auto;
+  display: flex;
+  margin-bottom: 5px;
+  border: '1px solid #e2e1de';
+  border-radius: 20px;
+}
+
+.file-tags-cell {
+  display: flex;
+  flex-wrap: wrap; /* Allows tags to wrap to the next line if there are too many */
+  gap: 4px;        /* Adjust this value (e.g., 4px, 6px, 0.5rem) to your liking */
+}
+
+/* Badges - Matching the soft "Member/Role" pill style */
+.size-badge {
+    background-color: #f3f4f6;
+    /* Soft gray */
+    color: #4b5563;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
 }
 
 .greeting-container {
@@ -220,4 +252,13 @@
 /* Optional: If you want to change the focus ring color to a subtle gray instead of green/blue */
 ::ng-deep .p-toggleswitch.p-focus .p-toggleswitch-slider {
   box-shadow: 0 0 0 0.2rem rgba(150, 150, 150, 0.5) !important;
+}
+
+::ng-deep .filter-tags-menu {
+  transform-origin: bottom left !important;
+}
+
+::ng-deep .p-datatable-table-container {
+  overflow-y: auto !important;
+  scrollbar-width: thin;
 }

@@ -7,6 +7,12 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { MenuModule } from 'primeng/menu';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { TableModule } from 'primeng/table';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { filter, Subscription } from 'rxjs';
 import { MarkdownComponent } from 'ngx-markdown';
@@ -18,6 +24,7 @@ import { AuthService } from '../../services/auth.service';
 import { OllamaService } from '../../services/ollama.service';
 
 import { VdAvatarComponent } from '../../components/vd-avatar/vd-avatar.component';
+import { FileService } from '../../services/file.service';
 
 @Component({
   selector: 'app-chats',
@@ -26,6 +33,12 @@ import { VdAvatarComponent } from '../../components/vd-avatar/vd-avatar.componen
     FormsModule,
     ClipboardModule,
     ButtonModule,
+    MenuModule,
+    TableModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+    AutoCompleteModule,
     ToggleSwitchModule,
     MarkdownComponent,
     VdAvatarComponent,
@@ -43,6 +56,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
   brokerService = inject(BrokerService);
   authService = inject(AuthService);
   ollamaService = inject(OllamaService);
+  fileService = inject(FileService);
 
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
@@ -59,6 +73,24 @@ export class ChatsComponent implements OnInit, OnDestroy {
   private abortController: AbortController | null = null;
   private navSubscription: Subscription;
 
+  tags: string[] = [];
+  suggestions: string[] = [];
+  files: any[]= [];
+  selectedFiles!: any[];
+  showFilterTagsPanel: boolean= false;
+  showTagsPanel: boolean= false;
+  tagsSelected: string[] = [];
+
+  menuFilterTagsItems = [
+    {
+      label: 'Filter by Tags',
+      icon: 'pi pi-paperclip',
+      command: () => {
+        this.loadFiles();
+      }
+    },     
+  ];
+
   constructor() {
     this.navSubscription = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -66,6 +98,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
       // 1. Get the navigation object inside the subscription
       const navigation = this.router.getCurrentNavigation();
       const messageReceived = navigation?.extras?.state?.['data'];
+      const tagsReceived = navigation?.extras?.state?.['tags'];
       this.activeRAG = navigation?.extras?.state?.['activeRAG'];
 
       if (messageReceived) {
@@ -76,15 +109,33 @@ export class ChatsComponent implements OnInit, OnDestroy {
         if(!messageReceived[0].id) {
           this.isNewConversartion = true;
           this.currentQuestion = messageReceived[0].content;
+          this.tagsSelected = tagsReceived;
 
-          //return;
+          // show tags if exist 
+          if (this.tagsSelected.length > 0) {
+            this.showTagsPanel = true;
+          }
 
+          // send prompt
           this.sendChat();
         } else {
           // if is a select conversation load all chats and not send promt to LLM
           this.messages = messageReceived;
         }
       }
+    });
+  }
+
+  private loadFiles() {
+    this.fileService.getFiles('custom-corpus')
+      .subscribe((response: any) => {
+        this.files = response.files.map((f: any) => ({
+          ...f,
+          collection: f.full_path.split('/')[0],
+          tags_str: f.tags.join(','),          
+        }));
+
+        this.showFilterTagsPanel = true;
     });
   }
 
@@ -133,7 +184,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
       this.scrollToBottom();
     }
   }
-
+  
   // 1. Detect if the user is at the bottom BEFORE the view updates
   onScroll(): void {
     const element = this.scrollContainer.nativeElement;
@@ -207,6 +258,24 @@ export class ChatsComponent implements OnInit, OnDestroy {
     });
   }
 
+  onSelectTags() {
+    this.showFilterTagsPanel = false;
+
+    this.tagsSelected = Array.from(
+      new Set(this.selectedFiles.map(file => file.tags).flat())
+    );
+
+    if (this.tagsSelected.length > 0) {
+      this.showTagsPanel = true;
+    }
+  }
+
+  onClearTags() {
+    this.selectedFiles = [];
+    this.tagsSelected = [];
+    this.showTagsPanel = false;
+  }
+
   async sendChat() {    
     if (!this.currentQuestion.trim() && !this.isThinking) return;
 
@@ -235,6 +304,9 @@ export class ChatsComponent implements OnInit, OnDestroy {
     this.isThinking = true;
     this.abortController = new AbortController(); // Initialize new controller
 
+    // convert array strings to string separated by commas
+    const tagsSelected: string = this.tagsSelected.join(",");
+
     // Force a scroll to bottom as soon as the user sends the message
     setTimeout(() => this.scrollToBottom(), 0);
 
@@ -242,6 +314,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
       await this.chatService.streamChat(
         this.conversationId,
         userQuestion,
+        tagsSelected,
         this.messages,
         this.activeRAG,
         (chunk) => {

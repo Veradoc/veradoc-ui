@@ -6,9 +6,16 @@ import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { MenuModule } from 'primeng/menu';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { TableModule } from 'primeng/table';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { AuthService } from '../../services/auth.service';
 import { GreetingService } from '../../services/greeting.service';
+import { FileService } from '../../services/file.service';
 
 @Component({
   selector: 'app-conversation',
@@ -17,7 +24,13 @@ import { GreetingService } from '../../services/greeting.service';
     FormsModule,
     ButtonModule,
     ToggleSwitchModule,
+    MenuModule,
     ChipModule,
+    AutoCompleteModule,
+    TableModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
   ],
   templateUrl: './conversation.component.html',
   styleUrl: './conversation.component.scss'
@@ -26,10 +39,42 @@ export class ConversationComponent {
   authService = inject(AuthService);  
   router = inject(Router); 
   greeting = inject(GreetingService).getGreeting(this.authService.currentUser()?.name);
+  fileService = inject(FileService);
 
   activeRAG: boolean = true;
   message = '';
   isMenuOpen = false;
+
+  tags: string[] = [];
+  suggestions: string[] = [];
+  files: any[]= [];
+  selectedFiles!: any[];
+  showFilterTagsPanel: boolean= false;
+  showTagsPanel: boolean= false;
+  tagsSelected: string[] = [];
+
+  menuFilterTagsItems = [
+    {
+      label: 'Filter by Tags',
+      icon: 'pi pi-paperclip',
+      command: () => {
+        this.loadFiles();
+      }
+    },     
+  ];
+
+  private loadFiles() {
+    this.fileService.getFiles('custom-corpus')
+      .subscribe((response: any) => {
+        this.files = response.files.map((f: any) => ({
+          ...f,
+          collection: f.full_path.split('/')[0],
+          tags_str: f.tags.join(','),          
+        }));
+
+        this.showFilterTagsPanel = true;
+    });
+  }
 
   onAutoGrow(element: HTMLElement) {
     // 1. Temporarily shrink it to '0' so scrollHeight reflects only the text content
@@ -65,15 +110,25 @@ export class ConversationComponent {
     }
   }
 
-  onSendMessage(event: Event, element: HTMLElement) {
-    /*{
-      "id": "9f92c1155cd8483ab0b13d8206cf1ec4",      
-      "conversation_id": "4df664b9d7ec44b2a390781a68808e78",    
-      "content": "Resume of paper",
-      "role": "user",    
-      "created_at": "2026-04-20T12:45:30.039327"
-    }*/
+  onSelectTags() {
+    this.showFilterTagsPanel = false;
 
+    this.tagsSelected = Array.from(
+      new Set(this.selectedFiles.map(file => file.tags).flat())
+    );
+
+    if (this.tagsSelected.length > 0) {
+      this.showTagsPanel = true;
+    }
+  }
+
+  onClearTags() {
+    this.selectedFiles = [];
+    this.tagsSelected = [];
+    this.showTagsPanel = false;
+  }
+
+  onSendMessage(event: Event, element: HTMLElement) {
     if (this.message != '' && this.message.trim()) {
       console.log('Sending to RAG:', this.message);
 
@@ -85,9 +140,17 @@ export class ConversationComponent {
         }
       ];
 
+      // show tags if exist 
+      if (this.selectedFiles) {
+        this.tagsSelected = Array.from(
+          new Set(this.selectedFiles.map(file => file.tags).flat())
+        );
+      }
+
       this.router.navigate(['/chats'], { 
         state: {
           data: conversation,
+          tags: this.tagsSelected,
           activeRAG: this.activeRAG // selected by user to start a conversation
         } 
       });     
