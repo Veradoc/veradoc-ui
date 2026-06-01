@@ -145,18 +145,11 @@ export class ConversationComponent {
         }
       ];
 
-      // show tags if exist 
-      if (this.selectedFiles) {
-        this.tagsSelected = Array.from(
-          new Set(this.selectedFiles.map(file => file.tags).flat())
-        );
-      }
-
       this.router.navigate(['/chats'], { 
         state: {
           data: conversation,
           tags: this.tagsSelected,
-          activeRAG: this.activeRAG // selected by user to start a conversation
+          activeRAG: this.activeRAG
         } 
       });     
     }
