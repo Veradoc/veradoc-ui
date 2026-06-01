@@ -43,25 +43,10 @@
     </div>
 
     <div class="input-container">
-        <!-- Panel Tags Selected -->
-        <div *ngIf="showTagsPanel" class="input-filter-tags" 
-            style="display: flex; gap: 1; flex-direction: row; align-items: center; justify-content: space-between; border-radius: 20px; border: 1px solid #e0e0e0;">
-            <p-autocomplete
-                [(ngModel)]="tagsSelected"
-                [multiple]="true"
-                [suggestions]="suggestions"
-                [showEmptyMessage]="false"
-                style="width: 100%;"                    
-            />
-            <p-button
-                label="Clear"
-                size="small"
-                severity="secondary"
-                (onClick)="onClearTags()" />            
-        </div>
-
-        <!-- Panel Tags Selected -->
-        <div *ngIf="showFilterTagsPanel" class="input-filter-tags" style="border-radius: 20px; overflow-x: hidden; overflow-y: auto; border: 1px solid #e0e0e0;">
+        <!-- Panel files Selected -->
+        <div *ngIf="showFilterTagsPanel" 
+            class="input-filter-tags"
+            style="border-radius: 20px; overflow-x: hidden; overflow-y: auto; border: 1px solid #e0e0e0;">
             <p-table #dtFiles
                 [value]="files" 
                 [(selection)]="selectedFiles"
@@ -111,6 +96,14 @@
             </p-table>  
         </div>        
 
+        <!-- Panel Tags Selected -->
+        <div *ngIf="showTagsPanel" class="input-filter-tags"
+            style="display: flex; gap: 1; flex-direction: row; align-items: center; justify-content: space-between; border-radius: 20px; border: 1px solid #e0e0e0;">
+            <p-autocomplete [(ngModel)]="tagsSelected" [multiple]="true" [suggestions]="suggestions" [showEmptyMessage]="false"
+                style="width: 100%;" />
+            <p-button label="Clear" size="small" severity="secondary" (onClick)="onClearTags()" />
+        </div>
+
         <!-- Panel Prompt -->
         <div class="input-container-inner">
             <div class="input-card p-shadow-1">
@@ -153,9 +146,7 @@
                         </div>
                     </div>
                     <div class="input-meta">
-                        <span class="model-tag">Llama 3.1 
-                            <!--<i class="pi pi-chevron-down"></i>-->
-                        </span>
+                        <!--<span class="model-tag">Llama 3.1</span>-->
                         <p-button 
                             (onClick)="sendChat()" 
                             [icon]="isThinking ? 'pi pi-stop-circle' : 'pi pi-send'"

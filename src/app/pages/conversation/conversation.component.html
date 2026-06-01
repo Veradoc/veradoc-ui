@@ -13,25 +13,10 @@
       <h1 class="user-greeting">{{ greeting }}</h1>
     </div>
     
-    <!-- Panel Tags Selected -->
-    <div *ngIf="showTagsPanel" class="input-filter-tags" 
-        style="display: flex; gap: 1; flex-direction: row; align-items: center; justify-content: space-between; border-radius: 20px; border: 1px solid #e0e0e0;">
-        <p-autocomplete
-            [(ngModel)]="tagsSelected"
-            [multiple]="true"
-            [suggestions]="suggestions"
-            [showEmptyMessage]="false"
-            style="width: 100%;"                    
-        />
-        <p-button
-            label="Clear"
-            size="small"
-            severity="secondary"
-            (onClick)="onClearTags()" />            
-    </div>
-
-    <!-- Panel Tags Selected -->
-    <div *ngIf="showFilterTagsPanel" class="input-filter-tags" style="border-radius: 20px; overflow-x: hidden; overflow-y: auto; border: 1px solid #e0e0e0;">
+    <!-- Panel files Selected -->
+    <div *ngIf="showFilterTagsPanel"
+        class="input-filter-tags"
+        style="border-radius: 20px; overflow-x: hidden; overflow-y: auto; border: 1px solid #e0e0e0;">
         <p-table #dtFiles
             [value]="files" 
             [(selection)]="selectedFiles"
@@ -81,6 +66,14 @@
         </p-table>  
     </div>  
     
+    <!-- Panel Tags Selected -->
+    <div *ngIf="showTagsPanel" class="input-filter-tags"
+        style="display: flex; gap: 1; flex-direction: row; align-items: center; justify-content: space-between; border-radius: 20px; border: 1px solid #e0e0e0;">
+        <p-autocomplete [(ngModel)]="tagsSelected" [multiple]="true" [suggestions]="suggestions" [showEmptyMessage]="false"
+            style="width: 100%;" />
+        <p-button label="Clear" size="small" severity="secondary" (onClick)="onClearTags()" />
+    </div>
+
     <!-- Panel Prompt -->
     <div class="prompt-card p-shadow-1">
       <textarea
@@ -131,7 +124,7 @@
         </div>-->        
         
         <div class="model-selector">
-          <span class="model-name">Sonnet 4.6</span>
+          <!--<span class="model-name">Sonnet 4.6</span>-->
           <!--<i class="pi pi-chevron-down" style="font-size: 0.7rem"></i>-->
           <p-button 
             #messageButton

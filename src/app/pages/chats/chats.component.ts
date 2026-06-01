@@ -76,7 +76,7 @@ export class ChatsComponent implements OnInit, OnDestroy {
   tags: string[] = [];
   suggestions: string[] = [];
   files: any[]= [];
-  selectedFiles!: any[];
+  selectedFiles: any[] = [];
   showFilterTagsPanel: boolean= false;
   showTagsPanel: boolean= false;
   tagsSelected: string[] = [];
@@ -259,14 +259,19 @@ export class ChatsComponent implements OnInit, OnDestroy {
   }
 
   onSelectTags() {
+    // close tags filter panel
     this.showFilterTagsPanel = false;
-
-    this.tagsSelected = Array.from(
-      new Set(this.selectedFiles.map(file => file.tags).flat())
-    );
-
-    if (this.tagsSelected.length > 0) {
+    
+    if (this.selectedFiles.length > 0) {
+      // get files tags selected
+      this.tagsSelected = Array.from(
+        new Set(this.selectedFiles.map(file => file.tags).flat())
+      );
+      
+      // open tags selected panel
       this.showTagsPanel = true;
+    } else {
+      this.onClearTags();
     }
   }
 

@@ -48,7 +48,7 @@ export class ConversationComponent {
   tags: string[] = [];
   suggestions: string[] = [];
   files: any[]= [];
-  selectedFiles!: any[];
+  selectedFiles: any[] = [];
   showFilterTagsPanel: boolean= false;
   showTagsPanel: boolean= false;
   tagsSelected: string[] = [];
@@ -111,14 +111,19 @@ export class ConversationComponent {
   }
 
   onSelectTags() {
+    // close tags filter panel
     this.showFilterTagsPanel = false;
 
-    this.tagsSelected = Array.from(
-      new Set(this.selectedFiles.map(file => file.tags).flat())
-    );
+    if (this.selectedFiles.length > 0) {
+      // get files tags selected
+      this.tagsSelected = Array.from(
+        new Set(this.selectedFiles.map(file => file.tags).flat())
+      );
 
-    if (this.tagsSelected.length > 0) {
-      this.showTagsPanel = true;
+      // open tags selected panel
+      this.showTagsPanel = true;      
+    } else {
+      this.onClearTags();
     }
   }
 
@@ -156,10 +161,6 @@ export class ConversationComponent {
       });     
     }
   }  
-
-  onToggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
 
   sendChat(event: Event, element: HTMLElement) {  
     this.onSendMessage(event, element);
