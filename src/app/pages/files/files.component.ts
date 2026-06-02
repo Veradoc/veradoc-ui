@@ -223,6 +223,9 @@ export class FilesComponent implements OnInit {
     }
 
     onFilesSelected(event: Event): void {
+        // initialize files collection selected
+        this.selectedFiles = [];
+        
         const input = event.target as HTMLInputElement;
 
         if (input.files && input.files.length > 0) {

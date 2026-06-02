@@ -62,7 +62,8 @@
               [class.ng-invalid]="userForm.get('name')?.invalid && userForm.get('name')?.touched"
               [class.ng-dirty]="userForm.get('name')?.invalid && userForm.get('name')?.touched"/>
             <small class="p-error" 
-              *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">Full Name is required.
+              *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+              Full Name is required.
             </small>
           </div>
 

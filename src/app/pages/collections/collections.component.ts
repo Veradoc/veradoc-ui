@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { CollectionService } from '../../services/collection.service';
 import { CollectionStats } from '../../models/collection-stats.model';
@@ -21,6 +22,7 @@ import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from '../../
     CommonModule,
     FormsModule,
     CardModule,
+    InputTextModule,
     ButtonModule,
     ReactiveFormsModule,
     DialogModule,
