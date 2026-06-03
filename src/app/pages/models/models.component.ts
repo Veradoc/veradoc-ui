@@ -73,7 +73,7 @@ export class ModelsComponent implements OnInit {
     { "key": "sentence-similarity", text: "Sentence Similarity" },
     //{"key": "feature-extraction", text: "Features Extraction" }
   ];
-  filterModel: any = this.filterModels[0];
+  filterModel: any = this.filterModels[0].key;
   showTerminal: boolean = false;
 
   hasMorePages: boolean = true;

@@ -12,7 +12,7 @@
                     style="width: 100%"
                     (keydown)="onKeyDown($event)"/>
             </p-iconfield> 
-            <p-select 
+            <!--<p-select 
                 [options]="filterModels" [(ngModel)]="filterModel" optionLabel="name" 
                 size="small" placeholder="Select a model type" style="width: 330px; font-size: 15px;"
                 (onChange)="onFilterModels(filterModel.key)">
@@ -30,7 +30,7 @@
                 <ng-template #header>
                     <div class="font-medium p-3">Available Model Types</div>
                 </ng-template>
-            </p-select>            
+            </p-select>-->         
             <!--<p-button icon="pi pi-filter" 
                 [styleClass]="filterModel === 'image-text-to-text' ? 'active-dark-btn' : 'inactive-gray-btn'" 
                 label="Sort: Image Text to Text" severity="secondary" size="small" (onClick)="onFilterModels('image-text-to-text')">
