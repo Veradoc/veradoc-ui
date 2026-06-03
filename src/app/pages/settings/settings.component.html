@@ -91,6 +91,11 @@
           <p-inputnumber placeholder="Set Top Vectors" [(ngModel)]="topVectors" 
           (ngModelChange)="onTopVectorsChange($event)"/>    
         </div>
+        <div class="settings-item">
+          <span>Embedding Top Reranker Vectors</span>
+          <p-inputnumber placeholder="Set Top Reranker Vectors" [(ngModel)]="topRerankerVectors" 
+          (ngModelChange)="onTopRerankerVectorsChange($event)"/>    
+        </div>        
       </div>
     </section>
     }

@@ -36,6 +36,7 @@ import { SettingService } from '../../services/setting.service';
 })
 export class SettingsComponent implements OnInit {
   readonly TOP_VECTORS_KEY = "TOP_VECTORS"
+  readonly TOP_RERANKER_VECTORS_KEY = "TOP_RERANKER_VECTORS"
   private brokerService = inject(BrokerService);
   private confirmationService = inject(ConfirmationService); 
   private userService = inject(UserService);  
@@ -46,7 +47,8 @@ export class SettingsComponent implements OnInit {
   selectedJob = ''
   notificationsEnabled = true;
   name = '';
-  topVectors = 5
+  topVectors = 8
+  topRerankerVectors = 20
 
   menuItems = [
     { id: 'general', label: 'General' },
@@ -75,7 +77,21 @@ export class SettingsComponent implements OnInit {
 
           this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
         }
-      });    
+      }); 
+      
+    this.settingService.getValueByKey(this.TOP_RERANKER_VECTORS_KEY)
+      .subscribe({
+        next: (result: any) => {
+          if (result) {
+            this.topRerankerVectors = Number(result.value);
+          }
+        },
+        error: (err) => {
+          console.log(err);
+
+          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
+        }
+      });        
   }
 
   onDeleteAccount() {
@@ -112,6 +128,22 @@ export class SettingsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Top Vectors model setted successfully', BrokerMessageCriticity.SUCCESS);
+        },
+        error: (err) => {
+          console.log(err);
+
+          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
+        }
+      });
+  }
+
+  onTopRerankerVectorsChange(event: any) {
+    if (!this.topRerankerVectors) return;    
+
+    this.settingService.saveKey(this.TOP_RERANKER_VECTORS_KEY, this.topRerankerVectors.toString())
+      .subscribe({
+        next: () => {
+          this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Top Reranker Vectors model setted successfully', BrokerMessageCriticity.SUCCESS);
         },
         error: (err) => {
           console.log(err);
