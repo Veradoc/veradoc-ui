@@ -1,10 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 
 import { fromEvent, merge, timer, Subscription } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { filter, switchMap, take, tap } from 'rxjs/operators';
 
 import { AuthService } from './services/auth.service';
+import { WebSocketService } from './services/websocket.service';
+import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from './services/broker.service';
 
 @Component({
   selector: 'app-root',
@@ -17,11 +19,62 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit {
   private authService = inject(AuthService);
+  private wsService = inject(WebSocketService);
+  private brokerService = inject(BrokerService);
   private router = inject(Router);
   private idleSubscription?: Subscription;
+  private wsConnected = false;
+
+  private registerGlobalListeners(): void {
+    // Notificaciones globales de ingesta
+    this.wsService.on('doc.ingested').subscribe(msg => {
+      this.brokerService.sendMessage(
+        BrokerMessageType.SYSTEM_ALERT,
+        `${msg['filename']} — ${msg['chunks']} chunks indexados`,
+        BrokerMessageCriticity.SUCCESS);
+      
+        //this.documentStore.reload(); // actualiza la lista global
+    });
+
+    this.wsService.on('doc.progress').subscribe(msg => {
+      //this.documentStore.updateProgress(msg['doc_id'] as string, msg['pct'] as number);
+    });
+
+    this.wsService.on('doc.error').subscribe(msg => {
+      this.brokerService.sendMessage(
+        BrokerMessageType.SYSTEM_ALERT,
+        'Error de ingesta',
+        BrokerMessageCriticity.ERROR);
+    });
+  }
+
+  private connectWebsocket() {
+    effect(() => {
+      const user = this.authService.currentUser(); // Signal read
+
+      if (user && !this.wsConnected) {
+        this.wsService.connect(user.id);
+        this.registerGlobalListeners();
+        this.wsConnected = true;
+
+        console.log("Websocket connected");
+      }
+
+      if (!user && this.wsConnected) {
+        this.wsService.disconnect();
+        this.wsConnected = false;
+
+        console.log("Websocket disconnected");
+      }
+    });
+  }
   
+  constructor() {
+    this.connectWebsocket();
+  }
+
   ngOnInit() {
-    this.setupIdleTimeout();
+    this.setupIdleTimeout();    
   }
   
   setupIdleTimeout() {
