@@ -13,8 +13,8 @@ import { ConfirmationService } from 'primeng/api';
 import { OllamaService } from '../../services/ollama.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
-import { TerminalLogComponent } from '../../components/terminal-log/terminal-log-component';
 import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from '../../services/broker.service';
+import { EventLogService } from '../../services/event-log.service';
 
 @Component({
   selector: 'app-collections',
@@ -28,7 +28,6 @@ import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from '../../
     InputIconModule,
     TooltipModule,
     ConfirmDialogModule,
-    TerminalLogComponent,
   ],
   providers: [
     ConfirmationService
@@ -40,15 +39,13 @@ export class ModelsRunningComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private ollamaService = inject(OllamaService);
   private brokerService = inject(BrokerService);
-
-  @ViewChild('terminalModel') termLog!: TerminalLogComponent;
-  
+  private eventLog = inject(EventLogService);
+    
   ref = inject(DynamicDialogRef);
   allItems: any[] = [];
   filteredModels: any[] = [];
   searchQuery: string = '';
-  logs: any[] = [];
-  showTerminal = false;
+  logs: any[] = [];  
 
   private loadModels() {  
     this.ollamaService.getOllamaPulled(this.searchQuery)
@@ -70,19 +67,19 @@ export class ModelsRunningComponent implements OnInit {
 
     // Visual feedback: show it's working
     this.logs.push(`\nRequesting ${action} for ${model.name}...`);
-    this.termLog.info(`> Initiating ${action} for ${model.name}...`);
+    this.eventLog.info('Manage Model', `> Initiating ${action} for ${model.name}...`);
 
     await new Promise<void>((resolve, reject) => {
       this.ollamaService.processOllamaModelStream(model.name, action).subscribe({
         next: (chunk) => {
           this.logs.push(chunk);
-          this.termLog.info(chunk);
+          this.eventLog.info('Manage Model', chunk);
         },
         error: (err) => {
           this.logs.push(`\nError: ${err}`);
 
-          this.termLog.error(`[ERROR]: ${err}`);
-          this.termLog.info(`[ERROR]: Failed to delete model. ${err.error?.detail || err.message}`);
+          this.eventLog.error('Manage Model', `[ERROR]: ${err}`);          
+          this.eventLog.error('Manage Model', `[ERROR]: Failed to delete model. ${err.error?.detail || err.message}`);
 
           this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
 
@@ -98,7 +95,7 @@ export class ModelsRunningComponent implements OnInit {
     await new Promise(f => setTimeout(f, 500)); // Clean async delay
     
     this.logs.push("\n--- Action Finished ---");
-    this.termLog.info(`--- ${model.name} ${action}ed successfully ---`);
+    this.eventLog.info('Manage Model', `--- ${model.name} ${action}ed successfully ---`);
     this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, `Model ${action}ed`, BrokerMessageCriticity.SUCCESS);
 
     await this.loadModels(); // Assuming loadModels is also async*/    
@@ -133,8 +130,6 @@ export class ModelsRunningComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-text',
       rejectButtonStyleClass: 'p-button-danger p-button-text',
       accept: async () => {
-        this.showTerminal = true;
-
         await this.executeActionModel(model, action);
         
         console.log('END');
@@ -153,28 +148,23 @@ export class ModelsRunningComponent implements OnInit {
         rejectButtonStyleClass: 'p-button-danger p-button-text',
         accept: () => {
           // 1. Show terminal to give feedback
-          this.showTerminal = true;
-          this.termLog.info(`> Attempting to delete ${model.name}...`);
+          this.eventLog.info('Manage Model', `> Attempting to delete ${model.name}...`);
 
           // 2. Call the service
           this.ollamaService.deleteModel(model.name).subscribe({
             next: (res) => {
-              this.termLog.info(`[SUCCESS]: ${res.message}`);
+              this.eventLog.info('Manage Model', `[SUCCESS]: ${res.message}`);
               this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, 'Model deleted' , BrokerMessageCriticity.SUCCESS);
 
               this.loadModels();
             },
             error: (err) => {
-              this.termLog.info(`[ERROR]: Failed to delete model. ${err.error?.detail || err.message}`);
+              this.eventLog.error('Manage Model', `[ERROR]: Failed to delete model. ${err.error?.detail || err.message}`);
               this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message , BrokerMessageCriticity.ERROR);
             }
           });
         }
       });    
-  }
-
-  toggleTerminal() {
-    this.showTerminal = !this.showTerminal;
   }
 
   onClose() {

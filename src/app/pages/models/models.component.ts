@@ -14,14 +14,14 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import { SelectModule } from 'primeng/select';
 import { ConfirmationService } from 'primeng/api';
-import { DrawerModule } from 'primeng/drawer';
 
+import { AbbreviateNumberPipe } from '../../pipes/abbreviate-number.pipe';
 import { HuggingfaceService } from '../../services/huggingface.service';
 import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
-import { AbbreviateNumberPipe } from '../../pipes/abbreviate-number.pipe';
 import { OllamaService } from '../../services/ollama.service';
 import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from '../../services/broker.service';
-import { TerminalLogComponent } from '../../components/terminal-log/terminal-log-component';
+
+import { EventLogService } from '../../services/event-log.service';
 
 @Component({
   selector: 'app-collections',
@@ -39,11 +39,9 @@ import { TerminalLogComponent } from '../../components/terminal-log/terminal-log
     InputIconModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
-    DrawerModule,
     SelectModule,
     TimeAgoPipe,
     AbbreviateNumberPipe,
-    TerminalLogComponent,
   ],
   providers: [
     ConfirmationService
@@ -56,8 +54,7 @@ export class ModelsComponent implements OnInit {
   private huggingfaceService = inject(HuggingfaceService);
   private ollamaService = inject(OllamaService);
   private brokerService = inject(BrokerService);
-
-  @ViewChild('terminalModel') termLog!: TerminalLogComponent;
+  private eventLog = inject(EventLogService);
   
   loading: boolean = true;
   models: any[] = [];
@@ -179,24 +176,25 @@ export class ModelsComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-text',
       rejectButtonStyleClass: 'p-button-danger p-button-text',
       accept: async () => {
-        this.showTerminal = true;
-
-        this.termLog.info(`> Initiating pullingfor ${model.id}...`);
+        this.eventLog.info('Pull Model', `> Initiating pullingfor ${model.id}...`);
 
         this.ollamaService.pullModelStream(model)
           .subscribe({
-            next: (chunk) => {
-              console.log(chunk);
-              this.termLog.info(chunk);
+            next: (chunk) => {              
+              this.eventLog.info('Pull Model', chunk);
             },
             error: (err) => {
-              this.termLog.error(`[ERROR]: ${err}`);
-              this.termLog.info(`[ERROR]: Failed to delete model. ${err.error?.detail || err.message}`);
+              this.eventLog.error('Pull Model', `${err}`);
+              this.eventLog.error('Pull Model', `Failed to delete model. ${err.error?.detail || err.message}`);
 
               this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, err.message, BrokerMessageCriticity.ERROR);
             },
             complete: () => {
-              console.log("\n--- Model pull finished! ---");              
+              this.eventLog.info('Pull Model', '--- Model pull finished! ---');
+
+              this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, "--- Model pull finished! ---", BrokerMessageCriticity.INFO);
+
+              console.log('\n--- Model pull finished! ---');
             }
           });
       }

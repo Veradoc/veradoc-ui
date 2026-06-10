@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit, HostListener } from '@angular/core';
+import { Component, signal, inject, OnInit, HostListener, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
@@ -13,6 +13,7 @@ import { TagModule } from 'primeng/tag';
 import { MenuItem } from 'primeng/api';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { ToastModule } from 'primeng/toast';
+import { DrawerModule } from 'primeng/drawer';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { MessageService } from 'primeng/api';
 
@@ -21,7 +22,10 @@ import { FindDialogComponent } from '../pages/find-dialog/find-dialog.component'
 import { ModelsRunningComponent } from '../pages/models-running/models-running.component';
 import { ChatService } from '../services/chat.service';
 import { OllamaService } from '../services/ollama.service';
-import { BrokerMessage, BrokerMessageCriticity, BrokerMessageType, BrokerService } from '../services/broker.service';
+import { BrokerMessage, BrokerMessageType, BrokerService } from '../services/broker.service';
+
+import { TerminalLogComponent } from '../components/terminal-log/terminal-log-component';
+import { EventLogService, LogEntry } from '../services/event-log.service';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +39,9 @@ import { BrokerMessage, BrokerMessageCriticity, BrokerMessageType, BrokerService
     TooltipModule,
     TagModule,
     ToastModule,
-    TieredMenuModule
+    TieredMenuModule,
+    DrawerModule,
+    TerminalLogComponent
   ],
   providers: [
     MessageService,
@@ -45,13 +51,16 @@ import { BrokerMessage, BrokerMessageCriticity, BrokerMessageType, BrokerService
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent implements OnInit {
+  @ViewChild('terminalModel') termLog!: TerminalLogComponent;
+  
   private router = inject(Router);
   private dialogService = inject(DialogService);
-  private messageService = inject(MessageService);
+  private messageService = inject(MessageService);  
+  private chatService = inject(ChatService);
+  private ollamaService = inject(OllamaService);
+  private brokerService = inject(BrokerService);
+  private eventLog = inject(EventLogService);
   authService = inject(AuthService);
-  chatService = inject(ChatService);
-  ollamaService = inject(OllamaService);
-  brokerService = inject(BrokerService);
 
   refSearchChats: DynamicDialogRef | null | undefined;
   refRunningDialog: DynamicDialogRef | null | undefined;
@@ -61,7 +70,10 @@ export class LayoutComponent implements OnInit {
   activeRoute = '';
   message = '';
   name = '';
+  showTerminal: boolean = false;
 
+  private sub!: Subscription;
+  
   readonly headerTitles = [
     { path: '/conversation', title: 'New conversation', subtitle: 'Fresh Start, New Ideas.' },
     { path: '/chats', title: 'Chats', subtitle: 'Quick Connections, Instant Results.' },
@@ -174,9 +186,30 @@ export class LayoutComponent implements OnInit {
             detail: msg.value
           });
         }
-    });    
+      });
+    
+    // subscribe to any vent log to be showed
+    this.sub = this.eventLog.logs$
+      .subscribe((log: LogEntry) => {
+        if (!log) {
+          return;
+        }
+
+        // show the log terminal. The user must close manually
+        this.showTerminal = true;
+
+        // add event message to log terminal.
+        const msg = `[${log.source}] ${log.message}`;
+
+        switch (log.level) {
+          case 'info': this.termLog.info(msg); break;
+          case 'success': this.termLog.success(msg); break;
+          case 'error': this.termLog.error(msg); break;
+          case 'warn': this.termLog.warn(msg); break;
+        }
+      });   
   }
-  
+    
   onToggleSidebar() {
     this.isExpanded.update(value => !value);
   }
@@ -272,14 +305,21 @@ export class LayoutComponent implements OnInit {
           this.logs.push("\n--- Deployment Finished ---");            
         }
       });
-    }
+  }
+
+  onCloseTerminal() {
+    this.showTerminal = false;
+  }
 
   onHelp() {
     window.open('https://veradoc.ai/help.html', '_blank');
-    //this.brokerService.sendMessage(BrokerMessageType.SYSTEM_ALERT, "Our help will be available soon. Please be patient.", BrokerMessageCriticity.WARNING);
   } 
   
   onGoHome() {
     this.router.navigate(['/']);
   }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }  
 }

@@ -6,6 +6,8 @@ import {
   ViewChild,
   ElementRef,
   AfterViewChecked,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
  
@@ -29,7 +31,8 @@ export interface LogEntry {
           <span class="dot dot--green"></span>
         </div>-->
         <span class="tlog-title">{{ title }}</span>
-        <button class="tlog-clear" (click)="clear()" title="Clear logs">⌫</button>
+        <button class="tlog-clear" (click)="onClear()" title="Clear logs">⌫</button>
+        <button class="tlog-close" (click)="onClose()" title="Close terminal">✕</button>
       </div>
  
       <!-- Log body -->
@@ -55,16 +58,21 @@ export interface LogEntry {
   `,
   styles: [`
     :host {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      height: 100%;           /* ← fill whatever the parent gives */
       font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
     }
  
     .tlog-wrapper {
       background: #0d0d0d;
       border: 1px solid #1f1f1f;
-      border-radius: 10px;
+      //border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+      height: 100%;           /* ← fill :host */
+      display: flex;
+      flex-direction: column; /* ← header + body stacked */      
     }
  
     /* ── Header ── */
@@ -117,18 +125,25 @@ export interface LogEntry {
       background: #222;
     }
  
+    .tlog-close {
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
     /* ── Body ── */
     .tlog-body {
-      max-height: 320px;
+      flex: 1;
+      //max-height: 320px;
       overflow-y: auto;
       padding: 8px 0;
       scroll-behavior: smooth;
     }
  
-    .tlog-body::-webkit-scrollbar { width: 4px; }
-    .tlog-body::-webkit-scrollbar-track { background: transparent; }
-    .tlog-body::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
- 
+    .tlog-body::-webkit-scrollbar { width: 15px; }
+    .tlog-body::-webkit-scrollbar-track { background: #1a1a1a; }
+    .tlog-body::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+     .tlog-body::-webkit-scrollbar-thumb:hover { background: #666;     /* ← even lighter on hover */}
+
     .tlog-empty {
       padding: 20px 16px;
       color: #333;
@@ -191,6 +206,8 @@ export interface LogEntry {
 })
 export class TerminalLogComponent implements AfterViewChecked {
   @Input() title: string = 'Ollama Model Logs';
+  @Output() closed = new EventEmitter<void>();
+  
   @ViewChild('logBody') private logBody!: ElementRef<HTMLDivElement>;
  
   entries: LogEntry[] = [];
@@ -208,8 +225,15 @@ export class TerminalLogComponent implements AfterViewChecked {
   error(message: string)   { this.log(message, 'error');   }
   warn(message: string)    { this.log(message, 'warn');    }
  
-  clear() { this.entries = []; }
+  onClear() {
+    this.entries = [];
+  }
  
+  onClose() {
+    this.onClear();
+    this.closed.emit();                             // ← emit to parent
+  }
+
   ngAfterViewChecked() {
     if (this.shouldScroll && this.logBody) {
       const el = this.logBody.nativeElement;

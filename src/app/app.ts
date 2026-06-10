@@ -7,6 +7,7 @@ import { switchMap, tap } from 'rxjs/operators';
 import { AuthService } from './services/auth.service';
 import { WebSocketService } from './services/websocket.service';
 import { BrokerMessageCriticity, BrokerMessageType, BrokerService } from './services/broker.service';
+import { EventLogService } from './services/event-log.service';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,8 @@ export class AppComponent implements OnInit {
   private wsService = inject(WebSocketService);
   private brokerService = inject(BrokerService);
   private router = inject(Router);
+  private eventLog = inject(EventLogService);
+  
   private idleSubscription?: Subscription;
   private wsSubscriptions: Subscription[] = [];
 
@@ -32,10 +35,12 @@ export class AppComponent implements OnInit {
     this.wsSubscriptions.push(
       this.wsService.on('ws.test')
         .subscribe(msg => {
-          this.brokerService.sendMessage(
+          /*this.brokerService.sendMessage(
             BrokerMessageType.SYSTEM_ALERT,
             `Test message: ${msg['text']}`,
-            BrokerMessageCriticity.SUCCESS);
+            BrokerMessageCriticity.SUCCESS);*/
+          
+          this.eventLog.info('WebSocket test', `Test: ${msg['text']}`);          
         }),
       
       // Notificaciones globales de ingesta

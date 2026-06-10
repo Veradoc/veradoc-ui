@@ -190,4 +190,8 @@
   </main>
 </div>
 
+<p-drawer [(visible)]="showTerminal" [showCloseIcon]="false" position="bottom" [style]="{ 'height': '50%' }">
+  <app-terminal-log #terminalModel [title]="'Veradoc Logs'" (closed)="onCloseTerminal()" [style]="{ height: '100%' }" />
+</p-drawer>
+
 <p-toast />

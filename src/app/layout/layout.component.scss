@@ -388,7 +388,6 @@ $sidebar-bg: var(--brand-light);
 }
 
 ::ng-deep .menu-item-active {
-    //background: #1a1a1a !important; /* Deep black */
     background: var(--brand-dark) !important;
     color: #ffffff !important;      /* White text */
     border: 1px solid #333 !important;
@@ -397,4 +396,16 @@ $sidebar-bg: var(--brand-light);
 
 ::ng-deep .menu-item-active .p-button-icon {
     color: #ffffff !important;
+}
+
+::ng-deep .p-drawer-header {
+  display: none !important;
+}
+
+::ng-deep .p-drawer-content {
+  padding: 0 !important;
+}
+
+::ng-deep .tlog-wrapper {
+  height: 100%;
 }

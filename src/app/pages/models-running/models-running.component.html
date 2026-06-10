@@ -8,15 +8,6 @@
       placeholder="Find local models" 
       autoFocus>
 
-    <div class="header-actions">
-      <button pButton icon="pi pi-arrows-v" 
-              class="p-button-text p-button-sm" 
-              [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}"
-              (click)="toggleTerminal()"
-              pTooltip="Toggle Logs">
-      </button>
-    </div>
-
     <i class="pi pi-times close-btn" (click)="onClose()"></i>
   </div>
 
@@ -62,9 +53,9 @@
       </div>
     </div>
 
-    <div class="terminal-wrapper" [class.visible]="showTerminal">
+    <!--<div class="terminal-wrapper" [class.visible]="showTerminal">
       <app-terminal-log #terminalModel [title]="'Ollama Model Logs'" />      
-    </div>    
+    </div>-->    
   </div>
 </div>
 
