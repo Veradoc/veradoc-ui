@@ -2,7 +2,7 @@ import { Component, effect, inject, OnInit } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 
 import { fromEvent, merge, timer, Subscription } from 'rxjs';
-import { filter, switchMap, take, tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 
 import { AuthService } from './services/auth.service';
 import { WebSocketService } from './services/websocket.service';
@@ -23,50 +23,79 @@ export class AppComponent implements OnInit {
   private brokerService = inject(BrokerService);
   private router = inject(Router);
   private idleSubscription?: Subscription;
-  private wsConnected = false;
+  private wsSubscriptions: Subscription[] = [];
 
   private registerGlobalListeners(): void {
-    // Notificaciones globales de ingesta
-    this.wsService.on('doc.ingested').subscribe(msg => {
-      this.brokerService.sendMessage(
-        BrokerMessageType.SYSTEM_ALERT,
-        `${msg['filename']} — ${msg['chunks']} chunks indexados`,
-        BrokerMessageCriticity.SUCCESS);
+    this.clearListeners();
+    
+    // Notificaciones test event
+    this.wsSubscriptions.push(
+      this.wsService.on('ws.test')
+        .subscribe(msg => {
+          this.brokerService.sendMessage(
+            BrokerMessageType.SYSTEM_ALERT,
+            `Test message: ${msg['text']}`,
+            BrokerMessageCriticity.SUCCESS);
+        }),
       
-        //this.documentStore.reload(); // actualiza la lista global
-    });
+      // Notificaciones globales de ingesta
+      this.wsService.on('doc.ingested')
+        .subscribe(msg => {
+          this.brokerService.sendMessage(
+            BrokerMessageType.SYSTEM_ALERT,
+            `${msg['filename']} — ${msg['chunks']} chunks indexados`,
+            BrokerMessageCriticity.SUCCESS);
+          
+            //this.documentStore.reload(); // actualiza la lista global
+        }),
 
-    this.wsService.on('doc.progress').subscribe(msg => {
-      //this.documentStore.updateProgress(msg['doc_id'] as string, msg['pct'] as number);
-    });
+      this.wsService.on('doc.progress')
+        .subscribe(msg => {
+          //this.documentStore.updateProgress(msg['doc_id'] as string, msg['pct'] as number);
+        }),
 
-    this.wsService.on('doc.error').subscribe(msg => {
-      this.brokerService.sendMessage(
-        BrokerMessageType.SYSTEM_ALERT,
-        'Error de ingesta',
-        BrokerMessageCriticity.ERROR);
-    });
+      this.wsService.on('doc.error')
+        .subscribe(msg => {
+          this.brokerService.sendMessage(
+            BrokerMessageType.SYSTEM_ALERT,
+            'Error de ingesta',
+            BrokerMessageCriticity.ERROR);
+        }),
+    )
   }
 
+  private clearListeners(): void {
+    this.wsSubscriptions.forEach(s => s.unsubscribe());
+    this.wsSubscriptions = [];
+  }
+  
   private connectWebsocket() {
     effect(() => {
-      const user = this.authService.currentUser(); // Signal read
+      const user = this.authService.currentUser();
 
-      if (user && !this.wsConnected) {
+      if (user && !this.wsService.isConnected()) {
         this.wsService.connect(user.id);
         this.registerGlobalListeners();
-        this.wsConnected = true;
-
-        console.log("Websocket connected");
       }
 
-      if (!user && this.wsConnected) {
+      if (!user) {
         this.wsService.disconnect();
-        this.wsConnected = false;
-
-        console.log("Websocket disconnected");
+        this.clearListeners();
       }
     });
+  }
+  
+  private performAutoLogout() {
+    // Only logout if the session has some issue: 
+    // - Not exist session-
+    // - Not exist token inside session
+    // - The token inside is expired
+    if (!this.authService.isSessionOk()) {
+      this.authService.logout();
+      this.router.navigate(['/login'], {
+        queryParams: { reason: 'session-expired' }
+      });
+    }
   }
   
   constructor() {
@@ -99,21 +128,9 @@ export class AppComponent implements OnInit {
     ).subscribe();
   }
 
-  private performAutoLogout() {
-    // Only logout if the session has some issue: 
-    // - Not exist session-
-    // - Not exist token inside session
-    // - The token inside is expired
-    if (!this.authService.isSessionOk()) {
-      this.authService.logout();
-      this.router.navigate(['/login'], {
-        queryParams: { reason: 'session-expired' }
-      });
-    }
-  }
-
   // Cleanup to prevent memory leaks
   ngOnDestroy() {
     this.idleSubscription?.unsubscribe();
+    this.clearListeners();
   }
 }

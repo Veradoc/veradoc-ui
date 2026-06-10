@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, filter } from 'rxjs';
 
 export interface WsEvent {
     event: string;
@@ -10,21 +10,40 @@ export interface WsEvent {
 @Injectable({ providedIn: 'root' })
 export class WebSocketService implements OnDestroy {
     private ws!: WebSocket;
+    private messages$ = new Subject<WsEvent>();
     private wsConnected = false;
     private currentUserId: string | null = null;
-    private messages$ = new Subject<WsEvent>();
     private reconnectDelay = 2000;
     private pingInterval: ReturnType<typeof setInterval> | null = null;
 
+    private startPing(): void {
+        this.stopPing(); // garantiza que no haya uno previo activo
+
+        this.pingInterval = setInterval(() => {
+            if (this.ws?.readyState === WebSocket.OPEN) {
+                this.ws.send('ping');
+            }
+        }, 30_000);
+    }
+
+    private stopPing(): void {
+        if (this.pingInterval) {
+            clearInterval(this.pingInterval);
+
+            this.pingInterval = null;
+        }
+    }
+    
     isConnected(): boolean {
         return this.wsConnected;
     }
 
     connect(userId: string): void {
+        const url = `ws://localhost:8808/api/v1/ws/${userId}`;
+        
+        this.ws = new WebSocket(url);
         this.wsConnected = true;
         this.currentUserId = userId;
-        const url = `ws://localhost:8808/api/v1/ws/${userId}`;
-        this.ws = new WebSocket(url);
 
         this.ws.onopen = () => {
             console.log('WS conectado');
@@ -53,24 +72,12 @@ export class WebSocketService implements OnDestroy {
         this.ws.onerror = (e) => console.error('WS error', e);
     }
 
-    private startPing(): void {
-        this.stopPing(); // ← garantiza que no haya uno previo activo
-
-        this.pingInterval = setInterval(() => {
-            if (this.ws?.readyState === WebSocket.OPEN) {
-                this.ws.send('ping');
-            }
-        }, 30_000);
+    on(eventType: string): Observable<WsEvent> {
+        return this.messages$.pipe(
+            filter(msg => msg.event === eventType)
+        );
     }
-
-    private stopPing(): void {
-        if (this.pingInterval) {
-            clearInterval(this.pingInterval);
-
-            this.pingInterval = null;
-        }
-    }
-
+    
     disconnect(): void {
         this.wsConnected = false;
         this.currentUserId = null;
@@ -80,14 +87,6 @@ export class WebSocketService implements OnDestroy {
             this.ws.close();
             this.ws = null!;
         }
-    }
-
-    on(eventType: string): Observable<WsEvent> {
-        return new Observable(observer =>
-            this.messages$.subscribe(msg => {
-                if (msg.event === eventType) observer.next(msg);
-            })
-        );
     }
 
     ngOnDestroy(): void {
