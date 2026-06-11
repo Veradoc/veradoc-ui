@@ -1,6 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, Observable, filter } from 'rxjs';
 
+import { environment } from '../../environments/environment';
+
 export interface WsEvent {
     event: string;
     doc_id?: string;
@@ -9,13 +11,15 @@ export interface WsEvent {
 
 @Injectable({ providedIn: 'root' })
 export class WebSocketService implements OnDestroy {
+    private readonly wsUrl = `${environment.apiUrl}/api/v1/ws`;
+    
     private ws!: WebSocket;
     private messages$ = new Subject<WsEvent>();
     private wsConnected = false;
     private currentUserId: string | null = null;
     private reconnectDelay = 2000;
     private pingInterval: ReturnType<typeof setInterval> | null = null;
-
+    
     private startPing(): void {
         this.stopPing(); // garantiza que no haya uno previo activo
 
@@ -39,7 +43,7 @@ export class WebSocketService implements OnDestroy {
     }
 
     connect(userId: string): void {
-        const url = `ws://localhost:8808/api/v1/ws/${userId}`;
+        const url = `${this.wsUrl}/${userId}`;
         
         this.ws = new WebSocket(url);
         this.wsConnected = true;
