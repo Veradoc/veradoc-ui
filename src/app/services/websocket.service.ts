@@ -1,7 +1,8 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Subject, Observable, filter } from 'rxjs';
 
 import { environment } from '../../environments/environment';
+import { RuntimeConfigService } from './runtime-config.service';
 
 export interface WsEvent {
     event: string;
@@ -11,7 +12,10 @@ export interface WsEvent {
 
 @Injectable({ providedIn: 'root' })
 export class WebSocketService implements OnDestroy {
-    private readonly wsUrl = `${environment.apiUrl}/api/v1/ws`;
+    private config = inject(RuntimeConfigService);
+    
+    //private readonly wsUrl = `${environment.apiUrl}/api/v1/ws`;
+    private readonly wsUrl = `${this.config.wsUrl}/api/v1/ws`;
     
     private ws!: WebSocket;
     private messages$ = new Subject<WsEvent>();

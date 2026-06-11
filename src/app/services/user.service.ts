@@ -7,11 +7,16 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 import { User } from '../models/User';
+import { RuntimeConfigService } from './runtime-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-    private readonly userBaseUrl = `${environment.apiUrl}/api/v1/users`;
-    private readonly authBaseUrl = `${environment.apiUrl}/api/v1/auth`;
+    private config = inject(RuntimeConfigService);
+    
+    //private readonly userBaseUrl = `${environment.apiUrl}/api/v1/users`;
+    //private readonly authBaseUrl = `${environment.apiUrl}/api/v1/auth`;
+    private readonly userBaseUrl = `${this.config.apiUrl}/api/v1/users`;
+    private readonly authBaseUrl = `${this.config.apiUrl}/api/v1/auth`;
 
     private readonly STORAGE_KEY = 'veradoc_session';
 

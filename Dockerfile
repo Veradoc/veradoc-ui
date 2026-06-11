@@ -20,8 +20,18 @@ FROM nginx:alpine
 COPY --from=build /app/dist/veradoc-ui/browser /usr/share/nginx/html
 
 # Copy a custom nginx config to handle Angular routing (optional but recommended)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+#COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+#EXPOSE 80
+
+#CMD ["nginx", "-g", "daemon off;"]
+
+COPY docker/env.js.template /usr/share/nginx/html/env.js.template
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/entrypoint.sh"]

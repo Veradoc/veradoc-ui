@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -6,13 +6,16 @@ import { environment } from '../../environments/environment';
 
 import { ApiResponse } from '../models/api-response.model';
 import { CollectionStats } from '../models/collection-stats.model';
+import { RuntimeConfigService } from './runtime-config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
+  private config = inject(RuntimeConfigService);
+  
   private readonly STORAGE_KEY = 'veradoc_session';
-  private readonly baseUrl = `${environment.apiUrl}/api/v1/files`;
+  private readonly baseUrl = `${this.config.apiUrl}/api/v1/files`;
 
   constructor(private http: HttpClient) {}
 

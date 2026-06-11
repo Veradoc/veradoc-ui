@@ -1,13 +1,17 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
+import { RuntimeConfigService } from './runtime-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
+    private config = inject(RuntimeConfigService);
+
     private readonly STORAGE_KEY = 'veradoc_session';
-    private readonly baseUrl = `${environment.apiUrl}/api/v1/chats`;
+    //private readonly baseUrl = `${environment.apiUrl}/api/v1/chats`;
+    private readonly baseUrl = `${this.config.apiUrl}/api/v1/chats`;
 
     constructor(private http: HttpClient) { }
     

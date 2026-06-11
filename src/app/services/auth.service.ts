@@ -8,14 +8,17 @@ import { environment } from '../../environments/environment';
 
 import { UserService } from './user.service';
 import { User } from '../models/User';
+import { RuntimeConfigService } from './runtime-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
   private userService = inject(UserService);
   private router = inject(Router);
+  private config = inject(RuntimeConfigService);
   
-  private readonly baseUrl = `${environment.apiUrl}/api/v1/auth`;
+  //private readonly baseUrl = `${environment.apiUrl}/api/v1/auth`;
+  private readonly baseUrl = `${this.config.apiUrl}/api/v1/auth`;
   private readonly STORAGE_KEY = 'veradoc_session';
   
   // 1. The Private Signal (holds the actual data)
