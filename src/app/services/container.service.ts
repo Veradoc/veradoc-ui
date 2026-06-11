@@ -2,10 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../environments/environment';
 import { RuntimeConfigService } from './runtime-config.service';
 
-// Define an interface to get nice autocompletion
 @Injectable({
     providedIn: 'root'
 })
@@ -13,7 +11,6 @@ export class ContainerService {
     private config = inject(RuntimeConfigService);
     
     private readonly STORAGE_KEY = 'veradoc_session';
-    //private readonly baseUrl = `${environment.apiUrl}/api/v1/containers`;
     private readonly baseUrl = `${this.config.apiUrl}/api/v1/containers`;
 
     constructor(private http: HttpClient) {}

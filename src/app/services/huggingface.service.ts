@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../environments/environment';
 import { RuntimeConfigService } from './runtime-config.service';
 
 @Injectable({
@@ -12,7 +11,6 @@ export class HuggingfaceService {
     private config = inject(RuntimeConfigService);
     
     private readonly STORAGE_KEY = 'veradoc_session';
-    //private readonly baseUrl = `${environment.apiUrl}/api/v1/huggingface`;
     private readonly baseUrl = `${this.config.apiUrl}/api/v1/huggingface`;
 
     constructor(private http: HttpClient) {}

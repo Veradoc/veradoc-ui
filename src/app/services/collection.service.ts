@@ -1,8 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-import { environment } from '../../environments/environment';
 
 import { ApiResponse } from '../models/api-response.model';
 import { CollectionStats } from '../models/collection-stats.model';
@@ -15,7 +13,6 @@ export class CollectionService {
   private config = inject(RuntimeConfigService);
   
   private readonly STORAGE_KEY = 'veradoc_session';
-  //private readonly baseUrl = `${environment.apiUrl}/api/v1/collections`;
   private readonly baseUrl = `${this.config.apiUrl}/api/v1/collections`;
 
   constructor(private http: HttpClient) {}

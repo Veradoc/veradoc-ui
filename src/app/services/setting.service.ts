@@ -1,11 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { environment } from '../../environments/environment';
-
-import { ApiResponse } from '../models/api-response.model';
-import { CollectionStats } from '../models/collection-stats.model';
 import { RuntimeConfigService } from './runtime-config.service';
 
 @Injectable({

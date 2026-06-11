@@ -1,10 +1,7 @@
-// user.service.ts
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, throwError } from 'rxjs';
-
-import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
 import { User } from '../models/User';
 import { RuntimeConfigService } from './runtime-config.service';
@@ -13,8 +10,6 @@ import { RuntimeConfigService } from './runtime-config.service';
 export class UserService {
     private config = inject(RuntimeConfigService);
     
-    //private readonly userBaseUrl = `${environment.apiUrl}/api/v1/users`;
-    //private readonly authBaseUrl = `${environment.apiUrl}/api/v1/auth`;
     private readonly userBaseUrl = `${this.config.apiUrl}/api/v1/users`;
     private readonly authBaseUrl = `${this.config.apiUrl}/api/v1/auth`;
 

@@ -1,5 +1,4 @@
 #!/bin/sh
-# docker/entrypoint.sh
 
 # Substitute env vars into env.js at container startup
 envsubst '${API_URL} ${WS_URL}' \
