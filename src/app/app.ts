@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
   private router = inject(Router);
   private eventLog = inject(EventLogService);
   
+  private readonly MAX_TIMEOUT: number = 30; // max minutes
   private idleSubscription?: Subscription;
   private wsSubscriptions: Subscription[] = [];
 
@@ -35,35 +36,31 @@ export class AppComponent implements OnInit {
     this.wsSubscriptions.push(
       this.wsService.on('ws.test')
         .subscribe(msg => {
-          /*this.brokerService.sendMessage(
+          this.brokerService.sendMessage(
             BrokerMessageType.SYSTEM_ALERT,
             `Test message: ${msg['text']}`,
-            BrokerMessageCriticity.SUCCESS);*/
-          
-          this.eventLog.info('WebSocket test', `Test: ${msg['text']}`);          
+            BrokerMessageCriticity.SUCCESS);
         }),
       
-      // Notificaciones globales de ingesta
+      // Global Documentation events
       this.wsService.on('doc.ingested')
-        .subscribe(msg => {
+        .subscribe((msg: any) => {
           this.brokerService.sendMessage(
             BrokerMessageType.SYSTEM_ALERT,
             `${msg['filename']} — ${msg['chunks']} chunks indexados`,
             BrokerMessageCriticity.SUCCESS);
-          
-            //this.documentStore.reload(); // actualiza la lista global
         }),
 
       this.wsService.on('doc.progress')
-        .subscribe(msg => {
-          //this.documentStore.updateProgress(msg['doc_id'] as string, msg['pct'] as number);
+        .subscribe((msg: any) => {
+          this.eventLog.info('Doc embedding', `Token: ${msg.text}`);
         }),
 
       this.wsService.on('doc.error')
-        .subscribe(msg => {
+        .subscribe((msg: any) => {
           this.brokerService.sendMessage(
             BrokerMessageType.SYSTEM_ALERT,
-            'Error de ingesta',
+            msg,
             BrokerMessageCriticity.ERROR);
         }),
     )
@@ -120,8 +117,8 @@ export class AppComponent implements OnInit {
       fromEvent(document, 'scroll')
     );
 
-    // 2. Set the limit (e.g., 30 minutes = 1,800,000 ms)
-    const IDLE_TIME = 30 * 60 * 1000;
+    // 2. Set the limit in ms
+    const IDLE_TIME = this.MAX_TIMEOUT * 60 * 1000;
 
     this.idleSubscription = activity$.pipe(
       // Every time an event happens, restart the timer
@@ -133,7 +130,6 @@ export class AppComponent implements OnInit {
     ).subscribe();
   }
 
-  // Cleanup to prevent memory leaks
   ngOnDestroy() {
     this.idleSubscription?.unsubscribe();
     this.clearListeners();
