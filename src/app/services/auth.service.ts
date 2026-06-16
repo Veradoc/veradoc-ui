@@ -2,11 +2,12 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { finalize, tap } from 'rxjs';
+import { finalize, firstValueFrom, tap } from 'rxjs';
 
 import { UserService } from './user.service';
 import { User } from '../models/User';
 import { RuntimeConfigService } from './runtime-config.service';
+import { SettingService } from './setting.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -14,7 +15,8 @@ export class AuthService {
   private userService = inject(UserService);
   private router = inject(Router);
   private config = inject(RuntimeConfigService);
-  
+  private settingsService = inject(SettingService);
+
   private readonly baseUrl = `${this.config.apiUrl}/api/v1/auth`;
   private readonly STORAGE_KEY = 'veradoc_session';
   
@@ -67,7 +69,7 @@ export class AuthService {
   /**
    * Helper to clean up Signals and LocalStorage
    */
-  private clearLocalSession() {
+  private async clearLocalSession() {
     // 2. Remove the user data
     localStorage.removeItem('veradoc_session');
 
@@ -75,6 +77,16 @@ export class AuthService {
     // set it to null here so the UI updates immediately.
     this.currentUserSignal.set(null);
 
+    // ⚡ NEW: Silently fetch fresh public settings from FastAPI before changing views
+    try {
+      // firstValueFrom converts the observable into a promise we can await
+      await firstValueFrom(this.settingsService.loadSettings());
+      console.log('Public application settings refreshed successfully for logout screen.');
+    } catch (error) {
+      // If the network fails, log it but don't block the user from logging out
+      console.error('Could not refresh settings on logout, proceeding with stale data', error);
+    }
+    
     // 4. Redirect to login
     this.router.navigate(['/login']);
   }

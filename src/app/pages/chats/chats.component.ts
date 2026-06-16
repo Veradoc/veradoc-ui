@@ -135,6 +135,11 @@ export class ChatsComponent implements OnInit, OnDestroy {
           tags_str: f.tags.join(','),          
         }));
 
+        // remove the owner_id tag to be selectable
+        this.files.forEach((file) => {
+          file.tags = file.tags.filter((tag: any) => tag !== 'owner_id');
+        });
+        
         this.showFilterTagsPanel = true;
     });
   }

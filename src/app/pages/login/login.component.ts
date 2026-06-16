@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, inject } from '@angular/core';
+import { Component, OnInit, NgZone, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { PasswordModule } from 'primeng/password';
 import { MessageService } from 'primeng/api';
 
 import { AuthService } from '../../services/auth.service';
+import { SettingService } from '../../services/setting.service';
 
 // Declare 'google' as a global variable so TS doesn't complain
 declare var google: any;
@@ -31,14 +32,21 @@ declare var google: any;
     MessageService,
   ]  
 })
-export class LoginComponent implements OnInit {
-  private readonly clientId = '203872501539-5utooc4ptpso11301ruqllthq17nb3kb.apps.googleusercontent.com';
+export class LoginComponent implements OnInit {  
+  readonly GOOGLE_ACTIVE_OAUTH = "GOOGLE_ACTIVE_OAUTH"
+  readonly GOOGLE_CLIENT_ID = "GOOGLE_CLIENT_ID"
+  readonly GOOGLE_CLIENT_SECRET = "GOOGLE_CLIENT_SECRET"
+
+  googleActiveOAuth: boolean = false;
+  private clientId: string | undefined;
+  private clientSecret: string | undefined;
 
   messageService = inject(MessageService); 
   router = inject(Router); 
   ngZone = inject(NgZone); 
   route = inject(ActivatedRoute);
   authService = inject(AuthService); 
+  private settingService = inject(SettingService);
 
   email: string = '';
   password: string = '';
@@ -85,6 +93,28 @@ export class LoginComponent implements OnInit {
     );    
   }
 
+  constructor() {
+    effect(() => {
+      this.googleActiveOAuth = this.settingService.getSettingValue(this.GOOGLE_ACTIVE_OAUTH) === "true";
+
+      if (this.googleActiveOAuth) {
+        this.clientId = this.settingService.getSettingValue(this.GOOGLE_CLIENT_ID);
+        this.clientSecret = this.settingService.getSettingValue(this.GOOGLE_CLIENT_SECRET);
+      
+        if (typeof google !== 'undefined') {
+          // Script already loaded (Chrome cache hit)
+          this.initGoogle();
+        } else {
+          // Safari / incognito: wait for script to finish loading
+          const scriptEl = document.querySelector('script[src*="accounts.google.com/gsi/client"]');
+          if (scriptEl) {
+            scriptEl.addEventListener('load', () => this.initGoogle());
+          }
+        }
+      }
+    });
+  }
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params['reason'] === 'session-expired') {
@@ -95,17 +125,6 @@ export class LoginComponent implements OnInit {
         });
       }
     });
-    
-    if (typeof google !== 'undefined') {
-      // Script already loaded (Chrome cache hit)
-      this.initGoogle();
-    } else {
-      // Safari / incognito: wait for script to finish loading
-      const scriptEl = document.querySelector('script[src*="accounts.google.com/gsi/client"]');
-      if (scriptEl) {
-        scriptEl.addEventListener('load', () => this.initGoogle());
-      }
-    }
   }
 
   onKeyDown(event: any) {

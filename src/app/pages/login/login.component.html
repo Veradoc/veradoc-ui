@@ -9,15 +9,17 @@
         <p class="brand-subtitle">Private RAG Knowledge Base</p>
       </div>
 
-      <button class="google-btn" (click)="onLoginWithGoogle()">
-        <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google logo">
-        <span>Continue with Google</span>
-      </button>
+      @if (googleActiveOAuth) {
+        <button class="google-btn" (click)="onLoginWithGoogle()">
+          <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google logo">
+          <span>Continue with Google</span>
+        </button>
 
-      <div class="divider">
-        <span>or</span>
-      </div>
-      
+        <div class="divider">
+          <span>or</span>
+        </div>
+      }
+
       <div class="login-form flex flex-column gap-4">
         <div class="field-group">
           <span class="p-input-icon-left w-full">

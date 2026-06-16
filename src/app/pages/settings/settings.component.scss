@@ -56,6 +56,10 @@
 }
 
 /* Form Styles */
+form {
+  width: 100%;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

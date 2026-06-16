@@ -12,9 +12,17 @@
   </aside>
 
   <main class="settings-content">
+    <form #settingsForm="ngForm">
     @if (selectedSection === 'general') {
       <section>
-        <h3>Profile</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Profile</h3>
+          <p-button icon="pi pi-save" label="Save Settings" size="small"
+            [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}"
+            [disabled]="!settingsForm.dirty"
+            (onClick)="onSaveSettings(settingsForm)" />
+        </div>
+        
         <div class="form-grid">
           <div class="form-group">
             <label>Full name</label>
@@ -22,6 +30,7 @@
               <span class="avatar-circle">{{ authService.currentUser()?.name | slice:0:2 | uppercase }}</span>
               <input type="text" pInputText 
                 placeholder="Picasso" 
+                name="name" 
                 [(ngModel)]="name"
                 />
             </div>
@@ -29,7 +38,7 @@
 
           <div class="form-group">
             <label>What should Claude call you?</label>
-            <input type="text" pInputText placeholder="e.g. Mike, AI" />
+            <input type="text" pInputText placeholder="e.g. Mike, AI" style="width: 100%;"/>
           </div>
         </div>
 
@@ -37,6 +46,7 @@
           <label>What best describes your work?</label>
           <p-select 
               [options]="jobs" 
+              name="selectedJob"
               [(ngModel)]="selectedJob" 
               optionLabel="label" 
               placeholder="Selecciona una opción" 
@@ -46,7 +56,7 @@
 
         <div class="form-group mt-4">
           <label>What personal preferences should VeraDoc consider?</label>
-          <textarea pInputTextarea rows="4" placeholder="e.g. I primarily code in Python (not a coding beginner)"></textarea>
+          <textarea pInputTextarea rows="4" placeholder="e.g. I primarily code in Python (not a coding beginner)" style="width: 100%;"></textarea>
         </div>
 
         <hr class="separator" />
@@ -58,6 +68,7 @@
             <p class="row-subtitle">Receive notifications when VeraDoc has finished a response.</p>
           </div>
           <p-toggleswitch 
+              name="notificationsEnabled"
               [(ngModel)]="notificationsEnabled" 
               ariaLabelledBy="notif-label">
           </p-toggleswitch>
@@ -65,40 +76,81 @@
       </section>
     }
 
-    @if (selectedSection === 'account') {
-      <section>
-        <h3>Account</h3>
-        <div class="settings-list">
-          <div class="settings-item">
-            <span>Log out of all devices</span>
-            <button class="btn btn-outline" (click)="onLogout()">Log out</button>
-          </div>
-
-          <div class="settings-item">
-            <span>Delete your account</span>
-            <button class="btn btn-danger" (click)="onDeleteAccount()">Delete account</button>
-          </div>
-        </div>
-      </section>
-    }
-
-    @if (selectedSection === 'model') {
+    @if (selectedSection === 'google' && authService.currentUser()?.is_superuser == true) {
     <section>
-      <h3>Model Configurations</h3>
-      <div class="settings-list">
-        <div class="settings-item">
-          <span>Embedding Top Vectors</span>
-          <p-inputnumber placeholder="Set Top Vectors" [(ngModel)]="topVectors" 
-          (ngModelChange)="onTopVectorsChange($event)"/>    
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>Google configurations</h3>
+        <p-button icon="pi pi-save" label="Save Settings" size="small"
+          [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}"
+          [disabled]="!settingsForm.dirty"
+          (onClick)="onSaveSettings(settingsForm)" />
+      </div> 
+     
+      <div class="form-grid">
+          <div class="flex align-items-center gap-2">
+            <span for="ragToggle" class="text-sm text-gray-500 font-normal">Active Google Authentication</span>
+            <p-toggleswitch inputId="ragToggle" name="googleActiveOAuth" [(ngModel)]="googleActiveOAuth" />
+          </div>
         </div>
-        <div class="settings-item">
-          <span>Embedding Top Reranker Vectors</span>
-          <p-inputnumber placeholder="Set Top Reranker Vectors" [(ngModel)]="topRerankerVectors" 
-          (ngModelChange)="onTopRerankerVectorsChange($event)"/>    
-        </div>        
+      <div class="form-grid">
+        <div class="form-group mt-4" style="grid-column: span 2;">
+          <label>Client Id</label>
+          <input type="text" pInputText placeholder="8945123901539-5utooc4ptpso11301kiwllthq17nb3ft.apps.googleusercontent.com" 
+            name="googleClientId" [(ngModel)]="googleClientId"/>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group mt-4" style="grid-column: span 2;">
+          <label>Client Secret</label>
+          <input type="text" pInputText placeholder="XXIOJK-lovvPLTkONMLpGlvUmlowBFsOjvS"
+            name="googleClientSecret" [(ngModel)]="googleClientSecret"/>
+        </div>
       </div>
     </section>
     }
+
+    @if (selectedSection === 'model' && authService.currentUser()?.is_superuser == true) {
+    <section>      
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Model Configurations</h3>
+          <p-button icon="pi pi-save" label="Save Settings" size="small"
+            [style]="{'background-color': 'var(--brand-dark)', 'color': '#ffffff', 'border': 'none'}"
+            [disabled]="!settingsForm.dirty"
+            (onClick)="onSaveSettings(settingsForm)" />
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group mt-4">
+            <label>Embedding Top Vectors</label>          
+            <p-inputnumber placeholder="Set Top Vectors" name="topVectors" [(ngModel)]="topVectors"/>    
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group mt-4">
+            <label>Embedding Top Reranker Vectors</label>
+            <p-inputnumber placeholder="Set Top Reranker Vectors" name="topRerankerVectors" [(ngModel)]="topRerankerVectors"/>    
+          </div>        
+        </div>
+    </section>
+    }
+
+    @if (selectedSection === 'account') {
+    <section>
+      <h3>Account</h3>
+      <div class="settings-list">
+        <div class="settings-item">
+          <span>Log out of all devices</span>
+          <button class="btn btn-outline" (click)="onLogout()">Log out</button>
+        </div>
+    
+        <div class="settings-item">
+          <span>Delete your account</span>
+          <button class="btn btn-danger" (click)="onDeleteAccount()">Delete account</button>
+        </div>
+      </div>
+    </section>
+    }
+  </form>
 
     <p-confirmDialog [style]="{ width: '450px' }" />
   </main>

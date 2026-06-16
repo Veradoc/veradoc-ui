@@ -122,6 +122,11 @@ export class FilesComponent implements OnInit {
             .subscribe({
                 next: (data: any) => {
                     this.files = data.files;
+
+                    // remove the owner_id tag to be selectable
+                    this.files.forEach((file) => {
+                        file.tags = file.tags.filter((tag: any) => tag !== 'owner_id');
+                    });
                 },
                 error: (err) => console.error('Error fetching files', err)
             });

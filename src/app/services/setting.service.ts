@@ -1,8 +1,13 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { RuntimeConfigService } from './runtime-config.service';
+
+export interface SettingValueResponse {
+    key: string;
+    value: string;
+}
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +18,9 @@ export class SettingService {
     private readonly STORAGE_KEY = 'veradoc_session';
     private readonly baseUrl = `${this.config.apiUrl}/api/v1/settings`;
 
+    private settingsSignal = signal<SettingValueResponse[]>([]);
+    public readonly settings = this.settingsSignal.asReadonly();
+    
     constructor(private http: HttpClient) { }
 
     private getAuthHeaders() {
@@ -31,6 +39,24 @@ export class SettingService {
         return headers;
     }
 
+    /**
+    * Helper method to easily find a specific setting by its key anywhere in the app
+    */
+    getSettingValue(key: string): string | undefined {
+        return this.settings().find(s => s.key === key)?.value;
+    }
+
+    /**
+    * Fetches settings from backend and caches them in the singleton state
+    */
+    loadSettings(): Observable<SettingValueResponse[]> {        
+        return this.http.get<SettingValueResponse[]>(`${this.baseUrl}`).pipe(
+            tap(data => {
+                this.settingsSignal.set(data);
+            })
+        );
+    }
+    
     getValueByKey(key: string): Observable<string> {
         const headers: any = this.getAuthHeaders();
 
