@@ -29,7 +29,7 @@
             <div class="input-with-avatar">
               <span class="avatar-circle">{{ authService.currentUser()?.name | slice:0:2 | uppercase }}</span>
               <input type="text" pInputText 
-                placeholder="Picasso" 
+                placeholder="e.g. Picasso" 
                 name="name" 
                 [(ngModel)]="name"
                 />
@@ -95,14 +95,14 @@
       <div class="form-grid">
         <div class="form-group mt-4" style="grid-column: span 2;">
           <label>Client Id</label>
-          <input type="text" pInputText placeholder="8945123901539-5utooc4ptpso11301kiwllthq17nb3ft.apps.googleusercontent.com" 
+          <input type="text" pInputText placeholder="e.g. 8945123901539-5utooc4ptpso11301kiwllthq17nb3ft.apps.googleusercontent.com" 
             name="googleClientId" [(ngModel)]="googleClientId"/>
         </div>
       </div>
       <div class="form-grid">
         <div class="form-group mt-4" style="grid-column: span 2;">
           <label>Client Secret</label>
-          <input type="text" pInputText placeholder="XXIOJK-lovvPLTkONMLpGlvUmlowBFsOjvS"
+          <input type="text" pInputText placeholder="e.g. XXIOJK-lovvPLTkONMLpGlvUmlowBFsOjvS"
             name="googleClientSecret" [(ngModel)]="googleClientSecret"/>
         </div>
       </div>
@@ -122,13 +122,13 @@
         <div class="form-grid">
           <div class="form-group mt-4">
             <label>Embedding Top Vectors</label>          
-            <p-inputnumber placeholder="Set Top Vectors" name="topVectors" [(ngModel)]="topVectors"/>    
+            <p-inputnumber placeholder="e.g. 2" name="topVectors" [(ngModel)]="topVectors"/>    
           </div>
         </div>
         <div class="form-grid">
           <div class="form-group mt-4">
             <label>Embedding Top Reranker Vectors</label>
-            <p-inputnumber placeholder="Set Top Reranker Vectors" name="topRerankerVectors" [(ngModel)]="topRerankerVectors"/>    
+            <p-inputnumber placeholder="e.g. 20" name="topRerankerVectors" [(ngModel)]="topRerankerVectors"/>    
           </div>        
         </div>
     </section>
