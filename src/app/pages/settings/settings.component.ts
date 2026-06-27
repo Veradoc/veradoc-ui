@@ -53,7 +53,7 @@ export class SettingsComponent implements OnInit {
   selectedJob = ''
   notificationsEnabled = true;
   name = '';
-  topVectors = 8
+  topVectors: number | undefined;
   topRerankerVectors = 20
   googleActiveOAuth: boolean = false;
   googleClientId: string | undefined;
@@ -83,7 +83,9 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.name = this.authService.currentUser()?.name ?? '';
 
-    this.topVectors = Number(this.settingService.getSettingValue(this.TOP_VECTORS_KEY))
+    const top_k_vectors = this.settingService.getSettingValue(this.TOP_VECTORS_KEY);
+
+    this.topVectors = top_k_vectors == null ? undefined : Number(this.settingService.getSettingValue(this.TOP_VECTORS_KEY))
     this.topRerankerVectors = Number(this.settingService.getSettingValue(this.TOP_RERANKER_VECTORS_KEY))       
     this.googleActiveOAuth = this.settingService.getSettingValue(this.GOOGLE_ACTIVE_OAUTH) === "true";
     this.googleClientId = this.settingService.getSettingValue(this.GOOGLE_CLIENT_ID);
